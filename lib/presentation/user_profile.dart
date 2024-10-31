@@ -248,6 +248,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   // Navigate to Settings page
                 },
               ),
+              // TO DO : ADD LOGOUT OPTION HERE IN  POP OUT CARD
               ListTile(
                 leading: const HugeIcon(
                   icon: HugeIcons.strokeRoundedLogout03,
@@ -262,11 +263,100 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 // trailing: const Icon(Icons.arrow_forward_ios,color: Colors.red,),
-                onTap: () async {
-                  final authProvider = context.read<AuthProvider>();
-                  await authProvider.signOut();
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const SignInScreen()));
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          height: 200,
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, bottom: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              // const HugeIcon(
+                              //   icon: HugeIcons.strokeRoundedSolidLine01,
+                              //   color: AppColors.greyscale500,
+                              // ),
+                              const Divider(
+                                  thickness: 2,
+                                  indent: 160,
+                                  endIndent: 160,
+                                  color: AppColors.greyscale300),
+                              Text(
+                                'Logout',
+                                style: GoogleFonts.urbanist(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.othersRed,
+                                ),
+                              ),
+                              const Divider(
+                                color: AppColors.greyscale300,
+                              ),
+                              Text(
+                                'Are you sure you want to logout?',
+                                style: GoogleFonts.urbanist(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.othersBlack,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 24,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: TextButton.styleFrom(
+                                      minimumSize: const Size(120, 50),
+                                      backgroundColor: AppColors.primary100,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(25))),
+                                    ),
+                                    child: Text('Cancel',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.urbanist(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.primary500)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      final authProvider =
+                                          context.read<AuthProvider>();
+                                      await authProvider.signOut();
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SignInScreen()));
+                                    },
+                                    style: TextButton.styleFrom(
+                                      minimumSize: const Size(120, 50),
+                                      backgroundColor: AppColors.primary500,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(25))),
+                                    ),
+                                    child: Text('Yes, Logout',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.urbanist(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.othersWhite)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
                 },
               ),
             ],
