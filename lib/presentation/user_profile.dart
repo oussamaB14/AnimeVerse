@@ -1,8 +1,11 @@
 import 'package:animeverse/core/models/user.dart';
 import 'package:animeverse/features/auth/pages/signin.dart';
 import 'package:animeverse/features/auth/provider/AuthProvider.dart';
+import 'package:animeverse/presentation/notification.dart';
 import 'package:animeverse/theme/AppColors.dart';
+import 'package:animeverse/theme/AppTextTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +19,9 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    AppTextTheme appTextTheme =
+        const AppTextTheme(); // Create an instance of AppTextTheme
+
     final authProvider = Provider.of<AuthProvider>(context);
     final firebaseUser = authProvider.user;
 
@@ -112,27 +118,48 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   icon: HugeIcons.strokeRoundedUser,
                   color: Colors.black,
                 ),
-                title: const Text('Edit Profile'),
+                title: Text(
+                  'Edit Profile',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
-                leading: const HugeIcon(
-                  icon: HugeIcons.strokeRoundedNotification03,
-                  color: Colors.black,
-                ),
-                title: const Text('Notifications'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  // Navigate to Notifications page
-                },
-              ),
+                  leading: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedNotification03,
+                    color: Colors.black,
+                  ),
+                  title: Text(
+                    'Notifications',
+                    style: GoogleFonts.urbanist(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    );
+                  }),
               ListTile(
                 leading: const HugeIcon(
                   icon: HugeIcons.strokeRoundedDownload03,
                   color: Colors.black,
                 ),
-                title: const Text('Downlaod'),
+                title: Text(
+                  'Downlaod',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to Settings page
@@ -143,7 +170,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   icon: HugeIcons.strokeRoundedSecurityValidation,
                   color: Colors.black,
                 ),
-                title: const Text('Security'),
+                title: Text(
+                  'Security',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to Settings page
@@ -154,7 +187,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   icon: HugeIcons.strokeRoundedLanguageCircle,
                   color: Colors.black,
                 ),
-                title: const Text('Language'),
+                title: Text('Language',
+                    style: GoogleFonts.urbanist(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    )),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to Settings page
@@ -165,7 +202,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   icon: HugeIcons.strokeRoundedMoon02,
                   color: Colors.black,
                 ),
-                title: const Text('Dark Mode'),
+                title: Text(
+                  'Dark Mode',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to Settings page
@@ -176,7 +219,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   icon: HugeIcons.strokeRoundedHelpCircle,
                   color: Colors.black,
                 ),
-                title: const Text('Help Center'),
+                title: Text(
+                  'Help Center',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to Settings page
@@ -187,7 +236,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   icon: HugeIcons.strokeRoundedHelpCircle,
                   color: Colors.black,
                 ),
-                title: const Text('Privcy Policy'),
+                title: Text(
+                  'Privcy Policy',
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to Settings page
@@ -196,11 +251,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ListTile(
                 leading: const HugeIcon(
                   icon: HugeIcons.strokeRoundedLogout03,
-                  color: Colors.red,
+                  color: AppColors.othersRed,
                 ),
-                title: const Text(
+                title: Text(
                   'Logout',
-                  style: TextStyle(color: Colors.red),
+                  style: GoogleFonts.urbanist(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.othersRed,
+                  ),
                 ),
                 // trailing: const Icon(Icons.arrow_forward_ios,color: Colors.red,),
                 onTap: () async {
