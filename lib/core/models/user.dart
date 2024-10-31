@@ -3,7 +3,8 @@ class User {
   final String nom;
   final String prenom;
   final String email;
-  final String motDePasse; // You can omit this field for security reasons
+  final String motDePasse;
+  final String userAvatar;
   final List<String> favorisMangas;
   final List<String> favorisAnimes;
   final List<String> historique;
@@ -13,6 +14,7 @@ class User {
     required this.nom,
     required this.prenom,
     required this.email,
+    required this.userAvatar,
     this.motDePasse = '',
     this.favorisMangas = const [],
     this.favorisAnimes = const [],
@@ -26,6 +28,7 @@ class User {
       'nom': nom,
       'prenom': prenom,
       'email': email,
+      'userAvatar': userAvatar,
       'favorisMangas': favorisMangas,
       'favorisAnimes': favorisAnimes,
       'historique': historique,
@@ -39,6 +42,7 @@ class User {
       nom: map['nom'],
       prenom: map['prenom'],
       email: map['email'],
+      userAvatar: map['userAvatar'],
       favorisMangas: List<String>.from(map['favorisMangas'] ?? []),
       favorisAnimes: List<String>.from(map['favorisAnimes'] ?? []),
       historique: List<String>.from(map['historique'] ?? []),

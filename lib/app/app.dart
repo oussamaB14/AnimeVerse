@@ -1,5 +1,5 @@
+import 'package:animeverse/app/routes/app_splashScreen.dart';
 import 'package:animeverse/features/auth/pages/signin.dart';
-import 'package:animeverse/presentation/home.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatelessWidget {
@@ -7,6 +7,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: Scaffold(body: SignInScreen()));
+    return const MaterialApp(home: Scaffold(body: SplashScreen()));
   }
 }

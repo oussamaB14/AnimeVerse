@@ -1,5 +1,8 @@
+import 'package:animeverse/features/auth/pages/signup.dart';
+import 'package:animeverse/features/auth/provider/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -30,14 +33,17 @@ class SignInScreen extends StatelessWidget {
                   iconUrl:
                       'https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0Re26C0t0tieWblXnFog%2F7e3199e6-826d-46ed-b8ff-6f0943e720ce.png',
                   text: 'Continue with Google',
-                  onPressed: () {},
+                  onPressed: () async {
+                    final authProvider = context.read<AuthProvider>();
+                    await authProvider.signInWithGoogle(context);
+                  },
                 ),
                 const SizedBox(height: 20),
                 _buildDividerWithText(),
                 const SizedBox(height: 20),
                 _buildSignInButton(),
                 const SizedBox(height: 20),
-                _buildSignUpPrompt(),
+                _buildSignUpPrompt(context),
               ],
             ),
           ),
@@ -178,7 +184,7 @@ class SignInScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSignUpPrompt() {
+  Widget _buildSignUpPrompt(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -190,7 +196,13 @@ class SignInScreen extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const SignupScreen(),
+              ),
+            );
+          },
           child: Text(
             'Sign up',
             style: GoogleFonts.urbanist(

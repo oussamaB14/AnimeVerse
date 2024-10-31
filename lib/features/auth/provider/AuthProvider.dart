@@ -1,3 +1,4 @@
+import 'package:animeverse/app/routes/app_wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -23,13 +24,14 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> signUpWithEmail(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
     } catch (e) {
       print('Error during sign up: $e');
     }
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
@@ -37,14 +39,19 @@ class AuthProvider with ChangeNotifier {
         return;
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      await _auth.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential).then((value) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const AppWrapper()),
+        );
+      });
     } catch (e) {
       print('Error during Google sign-in: $e');
     }
@@ -53,6 +60,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> signOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
+    
   }
 
   void _onAuthStateChanged(User? user) {
