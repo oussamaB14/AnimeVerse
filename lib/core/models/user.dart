@@ -1,13 +1,13 @@
 class User {
-  final String id;
-  final String nom;
-  final String prenom;
-  final String email;
-  final String motDePasse;
-  final String userAvatar;
-  final List<String> favorisMangas;
-  final List<String> favorisAnimes;
-  final List<String> historique;
+   String id;
+   String nom;
+   String prenom;
+   String email;
+   String motDePasse;
+   String userAvatar;
+   List<String> favorisMangas;
+   List<String> favorisAnimes;
+   List<String> historique;
 
   User({
     required this.id,

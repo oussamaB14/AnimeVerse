@@ -85,7 +85,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
     this.materialThemeLabelSmall,
     this.materialThemeTitleLarge,
     this.materialThemeTitleMedium,
-    this.materialThemeTitleSmall,
+    this.materialThemeTitleSmall, 
   });
 
   const AppTextTheme.fallback()

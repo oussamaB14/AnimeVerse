@@ -1,4 +1,5 @@
 import 'package:animeverse/presentation/home.dart';
+import 'package:animeverse/presentation/new_release.dart';
 import 'package:animeverse/presentation/user_profile.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _AppWrapperState extends State<AppWrapper> {
   // Define your pages here
   final List<Widget> _pages = [
     const HomeScreen(),
-    const ReleaseDateScreen(),
+    const NewReleasesScreen(),
     const MyListScreen(),
     const DownloadsScreen(),
     const UserProfileScreen(),

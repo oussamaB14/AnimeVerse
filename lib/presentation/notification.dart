@@ -59,19 +59,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),
                 ),
                 trailing: Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    onChanged: (value) {
-                      setState(() {
-                        value = !value;
-                      });
-                    },
-                    activeColor: Colors.green,
-                    thumbColor: WidgetStateProperty.all(Colors.white),
-                    inactiveTrackColor: Colors.grey.shade400,
-                    value: true,
-                  ),
-                ),
+                    scale: 0.8,
+                    child: Switch(
+                      value: isOn, // Replace with your boolean state
+                      onChanged: (value) {
+                        // Handle state change
+                        setState(() {
+                          isOn = value;
+                        });
+                      },
+                      activeTrackColor: const Color(0xFF06C149),
+                      activeColor: Colors.white,
+                      inactiveTrackColor: AppColors.greyscale200,
+                      inactiveThumbColor: Colors.white,
+                    )),
               ),
               ListTile(
                 title: Text(
@@ -81,20 +82,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                trailing: Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    onChanged: (value) {
-                      setState(() {
-                        value = !value;
-                      });
-                    },
-                    activeColor: Colors.green,
-                    thumbColor: WidgetStateProperty.all(Colors.white),
-                    inactiveTrackColor: Colors.grey.shade400,
-                    value: true,
-                  ),
-                ),
+                trailing:  Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: isOn, // Replace with your boolean state
+                      onChanged: (value) {
+                        // Handle state change
+                        setState(() {
+                          isOn = value;
+                        });
+                      },
+                      activeTrackColor: const Color(0xFF06C149),
+                      activeColor: Colors.white,
+                      inactiveTrackColor: AppColors.greyscale200,
+                      inactiveThumbColor: Colors.white,
+                    )),
               ),
               ListTile(
                 title: Text(
@@ -104,20 +106,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                trailing: Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    onChanged: (value) {
-                      setState(() {
-                        value = !value;
-                      });
-                    },
-                    activeColor: Colors.green,
-                    thumbColor: WidgetStateProperty.all(Colors.white),
-                    inactiveTrackColor: Colors.grey.shade400,
-                    value: true,
-                  ),
-                ),
+                trailing:  Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: isOn, // Replace with your boolean state
+                      onChanged: (value) {
+                        // Handle state change
+                        setState(() {
+                          isOn = value;
+                        });
+                      },
+                      activeTrackColor: const Color(0xFF06C149),
+                      activeColor: Colors.white,
+                      inactiveTrackColor: AppColors.greyscale200,
+                      inactiveThumbColor: Colors.white,
+                    )),
               ),
               ListTile(
                 title: Text(
@@ -127,20 +130,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                trailing: Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    onChanged: (value) {
-                      setState(() {
-                        value = !value;
-                      });
-                    },
-                    activeColor: Colors.green,
-                    thumbColor: WidgetStateProperty.all(Colors.white),
-                    inactiveTrackColor: Colors.grey.shade400,
-                    value: true,
-                  ),
-                ),
+                trailing:  Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: isOn, // Replace with your boolean state
+                      onChanged: (value) {
+                        // Handle state change
+                        setState(() {
+                          isOn = value;
+                        });
+                      },
+                      activeTrackColor: const Color(0xFF06C149),
+                      activeColor: Colors.white,
+                      inactiveTrackColor: AppColors.greyscale200,
+                      inactiveThumbColor: Colors.white,
+                    )),
               ),
             ],
           ),

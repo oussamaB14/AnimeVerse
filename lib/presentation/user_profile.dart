@@ -1,9 +1,11 @@
 import 'package:animeverse/core/models/user.dart';
 import 'package:animeverse/features/auth/pages/signin.dart';
 import 'package:animeverse/features/auth/provider/AuthProvider.dart';
+import 'package:animeverse/presentation/download.dart';
+import 'package:animeverse/presentation/edit_user_profile.dart';
 import 'package:animeverse/presentation/notification.dart';
 import 'package:animeverse/theme/AppColors.dart';
-import 'package:animeverse/theme/AppTextTheme.dart';
+//import 'package:animeverse/theme/AppTextTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -19,8 +21,8 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    AppTextTheme appTextTheme =
-        const AppTextTheme(); // Create an instance of AppTextTheme
+    // AppTextTheme appTextTheme =
+    //     const AppTextTheme();
 
     final authProvider = Provider.of<AuthProvider>(context);
     final firebaseUser = authProvider.user;
@@ -126,7 +128,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const EditUserProfileScreen(),
+                    ),
+                  );
+                },
               ),
               ListTile(
                   leading: const HugeIcon(
@@ -162,7 +170,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  // Navigate to Settings page
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const DownloadScreen(),
+                    ),
+                  );
                 },
               ),
               ListTile(
