@@ -5,6 +5,8 @@ import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:unicons/unicons.dart';
 
 class AppWrapper extends StatefulWidget {
   const AppWrapper({super.key});
@@ -43,25 +45,13 @@ class _AppWrapperState extends State<AppWrapper> {
         showUnselectedLabels: false,
         items: const [
           BottomNavigationBarItem(
-            icon: HugeIcon(
-              icon: HugeIcons.strokeRoundedHome01,
-              color: AppColors.greyscale500,
-            ),
-            activeIcon: HugeIcon(
-              icon: HugeIcons.strokeRoundedHome01,
-              color: AppColors.primary500,
-            ),
+            icon: Icon(Iconsax.home_1),
+            activeIcon: Icon(Iconsax.home5),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: HugeIcon(
-              icon: HugeIcons.strokeRoundedCalendar01,
-              color: AppColors.greyscale500,
-            ),
-            activeIcon: HugeIcon(
-              icon: HugeIcons.strokeRoundedCalendar01,
-              color: AppColors.primary500,
-            ),
+            icon: Icon(Iconsax.calendar),
+            activeIcon: Icon(Iconsax.calendar_15),
             label: 'Release Date',
           ),
           BottomNavigationBarItem(
@@ -76,7 +66,7 @@ class _AppWrapperState extends State<AppWrapper> {
             label: 'My List',
           ),
           BottomNavigationBarItem(
-             icon: HugeIcon(
+            icon: HugeIcon(
               icon: HugeIcons.strokeRoundedDownload03,
               color: AppColors.greyscale500,
             ),
