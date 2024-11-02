@@ -4,6 +4,7 @@ import 'package:animeverse/presentation/user_profile.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:unicons/unicons.dart';
@@ -50,40 +51,46 @@ class _AppWrapperState extends State<AppWrapper> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Iconsax.calendar),
-            activeIcon: Icon(Iconsax.calendar_15),
+            icon: HeroIcon(
+              HeroIcons.calendarDays,
+              style: HeroIconStyle.outline,
+            ),
+            activeIcon: HeroIcon(
+              HeroIcons.calendarDays,
+              style: HeroIconStyle.solid,
+            ),
             label: 'Release Date',
           ),
           BottomNavigationBarItem(
-            icon: HugeIcon(
-              icon: HugeIcons.strokeRoundedBookmark01,
-              color: AppColors.greyscale500,
+            icon: HeroIcon(
+              HeroIcons.bookmark,
+              style: HeroIconStyle.outline,
             ),
-            activeIcon: HugeIcon(
-              icon: HugeIcons.strokeRoundedBookmark01,
-              color: AppColors.primary500,
+            activeIcon: HeroIcon(
+              HeroIcons.bookmark,
+              style: HeroIconStyle.solid,
             ),
             label: 'My List',
           ),
           BottomNavigationBarItem(
-            icon: HugeIcon(
-              icon: HugeIcons.strokeRoundedDownload03,
-              color: AppColors.greyscale500,
+            icon: HeroIcon(
+              HeroIcons.inboxArrowDown,
+              style: HeroIconStyle.outline,
             ),
-            activeIcon: HugeIcon(
-              icon: HugeIcons.strokeRoundedDownload03,
-              color: AppColors.primary500,
+            activeIcon: HeroIcon(
+              HeroIcons.inboxArrowDown,
+              style: HeroIconStyle.solid,
             ),
             label: 'Downloads',
           ),
           BottomNavigationBarItem(
-            icon: HugeIcon(
-              icon: HugeIcons.strokeRoundedUser,
-              color: AppColors.greyscale500,
+            icon: HeroIcon(
+              HeroIcons.user,
+              style: HeroIconStyle.outline,
             ),
-            activeIcon: HugeIcon(
-              icon: HugeIcons.strokeRoundedUser,
-              color: AppColors.primary500,
+            activeIcon: HeroIcon(
+              HeroIcons.user,
+              style: HeroIconStyle.solid,
             ),
             label: 'Profile',
           ),

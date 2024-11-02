@@ -19,6 +19,7 @@ dependencies:
   hugeicons: ^0.0.7
   unicons: ^3.0.0
   iconsax: ^0.0.8
+  heroicons: ^0.10.0
 
 flutter_native_splash:
   color: "#ffffff"
