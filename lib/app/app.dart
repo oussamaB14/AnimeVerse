@@ -7,6 +7,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: Scaffold(body: SplashScreen()));
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(useMaterial3: true).copyWith(),
+      //darkTheme: ThemeData.dark(useMaterial3: true).copyWith(),
+      home: const Scaffold(
+        body: SplashScreen(),
+      ),
+    );
   }
 }

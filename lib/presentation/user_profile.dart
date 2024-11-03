@@ -21,8 +21,6 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    // AppTextTheme appTextTheme =
-    //     const AppTextTheme();
 
     final authProvider = Provider.of<AuthProvider>(context);
     final firebaseUser = authProvider.user;
@@ -38,7 +36,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Profile'),
+          title: Text(
+            'Profile',
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),

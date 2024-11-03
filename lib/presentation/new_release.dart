@@ -16,7 +16,7 @@ class _NewReleaseScreenState extends State<NewReleasesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Top Hits Anime',
+          'New Eposode Releases',
           style: GoogleFonts.urbanist(
             fontSize: 24,
             fontWeight: FontWeight.bold,

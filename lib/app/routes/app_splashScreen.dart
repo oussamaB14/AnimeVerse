@@ -39,7 +39,19 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset('assets/splash.png'), // Splash screen image
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.green.shade300,
+                Colors.green.shade500,
+              ],
+            ),
+          ),
+          child: Image.asset('assets/icon.png'), // Splash screen image
+        ),
       ),
     );
   }

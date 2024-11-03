@@ -1,13 +1,12 @@
 import 'package:animeverse/presentation/home.dart';
 import 'package:animeverse/presentation/new_release.dart';
+import 'package:animeverse/presentation/release_calander.dart';
 import 'package:animeverse/presentation/user_profile.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:unicons/unicons.dart';
 
 class AppWrapper extends StatefulWidget {
   const AppWrapper({super.key});
@@ -22,7 +21,7 @@ class _AppWrapperState extends State<AppWrapper> {
   // Define your pages here
   final List<Widget> _pages = [
     const HomeScreen(),
-    const NewReleasesScreen(),
+    const ReleaseCalanderScreen(),
     const MyListScreen(),
     const DownloadsScreen(),
     const UserProfileScreen(),
