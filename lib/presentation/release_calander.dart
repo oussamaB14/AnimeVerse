@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
-import 'package:easy_date_timeline/easy_date_timeline.dart';
 
 class ReleaseCalanderScreen extends StatefulWidget {
   const ReleaseCalanderScreen({super.key});

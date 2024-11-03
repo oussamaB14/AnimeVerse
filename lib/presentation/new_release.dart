@@ -1,3 +1,4 @@
+import 'package:animeverse/features/anime/widgets/anime_search_icon.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,13 +24,8 @@ class _NewReleaseScreenState extends State<NewReleasesScreen> {
             color: AppColors.darkDark2,
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const HugeIcon(
-                icon: HugeIcons.strokeRoundedSearch01,
-                color: AppColors.darkDark2,
-              ))
+        actions: const [
+          AnimeSearchIcon(color :AppColors.darkDark3),
         ],
       ),
       body: Padding(
@@ -86,4 +82,3 @@ class _NewReleaseScreenState extends State<NewReleasesScreen> {
     );
   }
 }
-

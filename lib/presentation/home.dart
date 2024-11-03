@@ -1,4 +1,5 @@
 import 'package:animeverse/features/anime/pages/anime_list.dart';
+import 'package:animeverse/features/anime/widgets/anime_search_icon.dart';
 import 'package:animeverse/presentation/new_release.dart';
 import 'package:animeverse/presentation/search_anime.dart';
 import 'package:animeverse/theme/AppColors.dart';
@@ -47,19 +48,8 @@ class _HomeState extends State<HomeScreen> {
                           ),
                         ),
                         actions: [
-                          IconButton(
-                            icon: const HugeIcon(
-                              icon: HugeIcons.strokeRoundedSearch01,
-                              color: AppColors.othersWhite,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SearchAnimeScreen(),
-                                ),
-                              );
-                            },
+                          const AnimeSearchIcon(
+                            color: AppColors.othersWhite,
                           ),
                           IconButton(
                             icon: const HugeIcon(
