@@ -1,3 +1,4 @@
+import 'package:animeverse/app/shared/app_bar.dart';
 import 'package:animeverse/features/anime/widgets/anime_list_item.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -15,24 +16,8 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Top Hits Anime',
-          style: GoogleFonts.urbanist(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.darkDark2,
-          ),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const HugeIcon(
-                icon: HugeIcons.strokeRoundedSearch01,
-                color: AppColors.darkDark2,
-              ))
-        ],
-      ),
+            appBar: const MyAppBar(title: 'Top Hits Anime'),
+
       body: ListView.builder(
         itemCount: 10, // Replace with the actual number of items
         itemBuilder: (context, index) {

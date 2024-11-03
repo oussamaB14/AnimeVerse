@@ -1,8 +1,6 @@
-import 'package:animeverse/features/anime/widgets/anime_search_icon.dart';
-import 'package:animeverse/theme/AppColors.dart';
+import 'package:animeverse/app/shared/app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hugeicons/hugeicons.dart';
+
 
 class NewReleasesScreen extends StatefulWidget {
   const NewReleasesScreen({super.key});
@@ -15,19 +13,7 @@ class _NewReleaseScreenState extends State<NewReleasesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'New Eposode Releases',
-          style: GoogleFonts.urbanist(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.darkDark2,
-          ),
-        ),
-        actions: const [
-          AnimeSearchIcon(color :AppColors.darkDark3),
-        ],
-      ),
+      appBar: const MyAppBar(title: 'New Episode Releases'),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: GridView.builder(

@@ -1,7 +1,7 @@
+import 'package:animeverse/app/shared/app_bar.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 
 class ReleaseCalanderScreen extends StatefulWidget {
@@ -15,24 +15,7 @@ class _ReleaseCalanderScreenState extends State<ReleaseCalanderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Release calendar ',
-          style: GoogleFonts.urbanist(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.darkDark2,
-          ),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const HugeIcon(
-                icon: HugeIcons.strokeRoundedSearch01,
-                color: AppColors.darkDark2,
-              ))
-        ],
-      ),
+      appBar: const MyAppBar(title: 'Release Calendar'),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +55,7 @@ class _ReleaseCalanderScreenState extends State<ReleaseCalanderScreen> {
                 separatorPadding: 16.0, // padding between days
               ),
             ),
-           const SizedBox(height: 45),
+            const SizedBox(height: 45),
             Center(
               child: Column(
                 children: [
