@@ -1,5 +1,4 @@
 import 'package:animeverse/presentation/search_anime.dart';
-import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 

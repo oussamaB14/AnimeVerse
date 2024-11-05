@@ -1,7 +1,7 @@
 import 'package:animeverse/features/anime/pages/anime_list.dart';
 import 'package:animeverse/features/anime/widgets/anime_search_icon.dart';
+import 'package:animeverse/presentation/anime_details.dart';
 import 'package:animeverse/presentation/new_release.dart';
-import 'package:animeverse/presentation/search_anime.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,7 +40,7 @@ class _HomeState extends State<HomeScreen> {
                         backgroundColor: Colors.transparent,
                         elevation: 0,
                         title: Text(
-                          'Home',
+                          'AnimeVerse',
                           style: GoogleFonts.urbanist(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -192,16 +192,26 @@ class _HomeState extends State<HomeScreen> {
                       children: [
                         Stack(
                           children: [
-                            Container(
-                              width: 120,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                image: const DecorationImage(
-                                  image: NetworkImage(
-                                    'https://storage.googleapis.com/fc-freepik-pro-rev1-eu-static/ai-styles-landings/anime/characters-and-scenes.jpg?h=1280',
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AnimeDetailsScreen(),
                                   ),
-                                  fit: BoxFit.cover,
+                                );
+                              },
+                              child: Container(
+                                width: 120,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  image: const DecorationImage(
+                                    image: NetworkImage(
+                                      'https://storage.googleapis.com/fc-freepik-pro-rev1-eu-static/ai-styles-landings/anime/characters-and-scenes.jpg?h=1280',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),

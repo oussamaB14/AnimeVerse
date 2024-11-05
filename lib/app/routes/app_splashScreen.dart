@@ -1,5 +1,4 @@
 import 'package:animeverse/app/routes/app_wrapper.dart';
-import 'package:animeverse/core/models/user.dart';
 import 'package:animeverse/features/auth/pages/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';

@@ -1,8 +1,6 @@
 import 'package:animeverse/presentation/home.dart';
-import 'package:animeverse/presentation/new_release.dart';
 import 'package:animeverse/presentation/release_calander.dart';
 import 'package:animeverse/presentation/user_profile.dart';
-import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';

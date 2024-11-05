@@ -7,6 +7,8 @@ class AnimeListItem extends StatefulWidget {
   State<AnimeListItem> createState() => _AnimeListItemState();
 }
 
+bool _isAdded = false;
+
 class _AnimeListItemState extends State<AnimeListItem> {
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,8 @@ class _AnimeListItemState extends State<AnimeListItem> {
                   top: 8,
                   left: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(8),
@@ -74,17 +76,37 @@ class _AnimeListItemState extends State<AnimeListItem> {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add,color: Colors.white,),
-                    label: const Text('My List',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(80, 32),
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isAdded = !_isAdded;
+                      });
+                    },
+                    child: Chip(
+                      label: Text(
+                        'My List',
+                        style: TextStyle(
+                          color: _isAdded ? Colors.green : Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
-                      textStyle: const TextStyle(color: Colors.white),
+                      backgroundColor:
+                          _isAdded ? Colors.transparent : Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(80),
+                        side: _isAdded
+                            ? const BorderSide(color: Colors.green)
+                            : const BorderSide(color: Colors.green),
+                      ),
+                      avatar: Icon(
+                        _isAdded ? Icons.done : Icons.add,
+                        color: _isAdded ? Colors.green : Colors.white,
+                        size: 16,
+                      ),
+                      visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity),
                     ),
                   ),
                 ],
@@ -96,4 +118,3 @@ class _AnimeListItemState extends State<AnimeListItem> {
     );
   }
 }
-

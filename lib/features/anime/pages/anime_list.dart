@@ -1,9 +1,7 @@
 import 'package:animeverse/app/shared/app_bar.dart';
 import 'package:animeverse/features/anime/widgets/anime_list_item.dart';
-import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hugeicons/hugeicons.dart';
+
 
 class AnimeListScreen extends StatefulWidget {
   const AnimeListScreen({super.key});

@@ -150,7 +150,6 @@ class _FilterSection extends StatelessWidget {
   const _FilterSection({
     required this.title,
     required this.options,
-    super.key,
   });
 
   final String title;
@@ -188,7 +187,6 @@ class _FilterSection extends StatelessWidget {
 class _FilterChip extends StatelessWidget {
   const _FilterChip({
     required this.option,
-    super.key,
   });
 
   final String option;
