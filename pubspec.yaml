@@ -24,6 +24,7 @@ dependencies:
   chewie: ^1.8.5
   flutter_launcher_icons: ^0.14.1
   http: ^1.2.2
+  shimmer: ^3.0.0
 
 flutter_native_splash:
   color: "#ffffff"

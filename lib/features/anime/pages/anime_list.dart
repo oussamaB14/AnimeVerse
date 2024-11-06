@@ -1,5 +1,6 @@
 import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
 import 'package:animeverse/features/anime/widgets/anime_list_item.dart';
+import 'package:animeverse/features/anime/widgets/anime_list_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Top Airing Anime')),
       body: animeProvider.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const AnimeListLoader()
           : ListView.builder(
               itemCount: animeProvider.animeList.length,
               itemBuilder: (context, index) {

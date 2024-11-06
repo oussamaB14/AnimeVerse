@@ -1,5 +1,7 @@
 import 'package:animeverse/core/models/anime.dart';
 import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
+import 'package:animeverse/features/anime/widgets/anime_details_loader.dart';
+import 'package:animeverse/features/player/pages/video_player_screen.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +26,8 @@ class _AnimeDetailsScreenState extends State<AnimeDetailsScreen> {
     super.initState();
     final animeProvider = Provider.of<AnimeProvider>(context, listen: false);
     animeProvider.clearAnimeDetails();
-    _animeDetailsFuture = animeProvider.fetchAnimeDetailsProvider(widget.animeId);
+    _animeDetailsFuture =
+        animeProvider.fetchAnimeDetailsProvider(widget.animeId);
   }
 
   @override
@@ -33,8 +36,7 @@ class _AnimeDetailsScreenState extends State<AnimeDetailsScreen> {
         future: _animeDetailsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-                body: Center(child: CircularProgressIndicator()));
+            return const Scaffold(body: AnimeDetailsLoader());
           }
 
           if (snapshot.hasError) {
@@ -262,89 +264,90 @@ class _AnimeDetailsScreenState extends State<AnimeDetailsScreen> {
                           const SizedBox(height: 10),
                           _animeDescriptionWidget(anime.description.toString()),
                           _episodesListTitle(["Season 1", "Season 2"]),
-                          SizedBox(
-                            height: 150,
-                            child: ListView.builder(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 10,
-                              itemBuilder: (_, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              // Navigator.of(context).push(
-                                              //   MaterialPageRoute(
-                                              //     builder: (context) =>
-                                              //         const AnimeDetailsScreen(
-                                              //       anime: null,
-                                              //     ),
-                                              //   ),
-                                              // );
-                                            },
-                                            child: Container(
-                                              width: 120,
-                                              height: 120,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                image: const DecorationImage(
-                                                  image: AssetImage(
-                                                      "assets/icon.png"),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 8,
-                                            left: 8,
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 6,
-                                                      vertical: 2),
-                                              decoration: BoxDecoration(
-                                                color: AppColors.primary500,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: Text(
-                                                "Episode ${index + 1}",
-                                                style: GoogleFonts.urbanist(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 0,
-                                            child: Center(
-                                              child: HugeIcon(
-                                                  icon: HugeIcons
-                                                      .strokeRoundedPlayCircle02,
-                                                  color: AppColors.othersWhite),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                          // SizedBox(
+                          //   height: 150,
+                          //   child: ListView.builder(
+                          //     padding: const EdgeInsets.only(left: 8.0),
+                          //     scrollDirection: Axis.horizontal,
+                          //     itemCount: 10,
+                          //     itemBuilder: (_, index) {
+                          //       return Padding(
+                          //         padding: const EdgeInsets.only(right: 8.0),
+                          //         child: Column(
+                          //           crossAxisAlignment:
+                          //               CrossAxisAlignment.start,
+                          //           children: [
+                          //             Stack(
+                          //               children: [
+                          //                 GestureDetector(
+                          //                   onTap: () {
+                          //                     // Navigator.of(context).push(
+                          //                     //   MaterialPageRoute(
+                          //                     //     builder: (context) =>
+                          //                     //         const AnimeDetailsScreen(
+                          //                     //       anime: null,
+                          //                     //     ),
+                          //                     //   ),
+                          //                     // );
+                          //                   },
+                          //                   child: Container(
+                          //                     width: 120,
+                          //                     height: 120,
+                          //                     decoration: BoxDecoration(
+                          //                       borderRadius:
+                          //                           BorderRadius.circular(16),
+                          //                       image: const DecorationImage(
+                          //                         image: AssetImage(
+                          //                             "assets/icon.png"),
+                          //                         fit: BoxFit.cover,
+                          //                       ),
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //                 Positioned(
+                          //                   top: 8,
+                          //                   left: 8,
+                          //                   child: Container(
+                          //                     padding:
+                          //                         const EdgeInsets.symmetric(
+                          //                             horizontal: 6,
+                          //                             vertical: 2),
+                          //                     decoration: BoxDecoration(
+                          //                       color: AppColors.primary500,
+                          //                       borderRadius:
+                          //                           BorderRadius.circular(8),
+                          //                     ),
+                          //                     child: Text(
+                          //                       "Episode ${index + 1}",
+                          //                       style: GoogleFonts.urbanist(
+                          //                         fontSize: 12,
+                          //                         fontWeight: FontWeight.bold,
+                          //                         color: Colors.white,
+                          //                       ),
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //                 const Positioned(
+                          //                   top: 0,
+                          //                   left: 0,
+                          //                   right: 0,
+                          //                   bottom: 0,
+                          //                   child: Center(
+                          //                     child: HugeIcon(
+                          //                         icon: HugeIcons
+                          //                             .strokeRoundedPlayCircle02,
+                          //                         color: AppColors.othersWhite),
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+                          _buildEpisodesSection(anime),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -623,5 +626,121 @@ Widget _animeDescriptionWidget(String text) {
               style: const TextStyle(fontWeight: FontWeight.w400),
             );
     },
+  );
+}
+
+Widget _buildEpisodesSection(Anime anime) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(
+          'Episodes',
+          style: GoogleFonts.urbanist(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.darkDark3,
+          ),
+        ),
+        trailing: Text(
+          '${anime.totalEpisodes} Episodes',
+          style: GoogleFonts.urbanist(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: AppColors.primary500,
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 150,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: anime.episodes.length,
+          itemBuilder: (context, index) {
+            final episode = anime.episodes[index];
+            return Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VideoPlayerScreen(
+                            episodeId: episode.id,
+                            title: 'Episode ${episode.number}',
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 160,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                          image: NetworkImage(anime.image),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          // Gradient overlay
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.7),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // Play icon
+                          const Center(
+                            child: HugeIcon(
+                              icon: HugeIcons.strokeRoundedPlayCircle02,
+                              size: 40,
+                              color: AppColors.othersWhite,
+                            ),
+                          ),
+                          // Episode number
+                          Positioned(
+                            bottom: 8,
+                            left: 8,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary500,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'Episode ${episode.number}',
+                                style: GoogleFonts.urbanist(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    ],
   );
 }

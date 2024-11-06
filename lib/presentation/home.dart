@@ -10,6 +10,8 @@ import 'package:animeverse/presentation/anime_details.dart';
 import 'package:provider/provider.dart';
 import 'package:animeverse/features/movies/providers/movieProvider.dart';
 import 'package:animeverse/core/models/movie.dart';
+import 'package:animeverse/features/anime/widgets/anime_listview_loader.dart';
+import 'package:animeverse/features/movies/pages/movies_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,128 +54,144 @@ class _HomeState extends State<HomeScreen> {
                 ),
               ),
               height: MediaQuery.of(context).size.height * 0.35,
-              child: Column(
+              child: Stack(
                 children: [
-                  AppBar(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    title: Text(
-                      'AnimeVerse',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.othersWhite,
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.3),  // Lighter at top
+                          Colors.black.withOpacity(0.7),  // Darker at bottom
+                        ],
                       ),
                     ),
-                    actions: [
-                      const AnimeSearchIcon(
-                        color: AppColors.othersWhite,
-                      ),
-                      IconButton(
-                        icon: const HugeIcon(
-                          icon: HugeIcons.strokeRoundedNotification02,
-                          color: AppColors.othersWhite,
-                        ),
-                        onPressed: () {
-                          // Handle notifications action
-                        },
-                      ),
-                    ],
                   ),
-                  const Spacer(),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Consumer<AnimeProvider>(
-                        builder: (context, provider, child) {
-                          if (provider.isLoadingRandom) {
-                            return const CircularProgressIndicator();
-                          }
-                          
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                provider.randomAnime?.title ?? 'Loading...',
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                provider.randomAnime?.genres.join(' | ') ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
+                  Column(
+                    children: [
+                      AppBar(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        title: Text(
+                          'AnimeVerse',
+                          style: GoogleFonts.urbanist(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.othersWhite,
+                          ),
+                        ),
+                        actions: [
+                          const AnimeSearchIcon(
+                            color: AppColors.othersWhite,
+                          ),
+                          IconButton(
+                            icon: const HugeIcon(
+                              icon: HugeIcons.strokeRoundedNotification02,
+                              color: AppColors.othersWhite,
+                            ),
+                            onPressed: () {
+                              // Handle notifications action
+                            },
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Consumer<AnimeProvider>(
+                            builder: (context, provider, child) {
+                              if (provider.isLoadingRandom) {
+                                return const CircularProgressIndicator();
+                              }
+                              
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      if (provider.randomAnime != null) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => AnimeDetailsScreen(
-                                              animeId: provider.randomAnime!.id,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    icon: const HugeIcon(
-                                      icon: HugeIcons.strokeRoundedPlay,
-                                      color: AppColors.othersWhite,
-                                    ),
-                                    label: const Text(
-                                      'Play',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.primary500,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  OutlinedButton.icon(
-                                    onPressed: () {
-                                      // Handle button press
-                                    },
-                                    icon: const Icon(
-                                      Icons.add,
+                                  Text(
+                                    provider.randomAnime?.title ?? 'Loading...',
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
-                                    label: const Text(
-                                      'My list',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                        width: 2,
-                                        color: Colors.white,
-                                      ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    provider.randomAnime?.genres.join(' | ') ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
                                   ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          if (provider.randomAnime != null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AnimeDetailsScreen(
+                                                  animeId: provider.randomAnime!.id,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        icon: const HugeIcon(
+                                          icon: HugeIcons.strokeRoundedPlay,
+                                          color: AppColors.othersWhite,
+                                        ),
+                                        label: const Text(
+                                          'Play',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColors.primary500,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      OutlinedButton.icon(
+                                        onPressed: () {
+                                          // Handle button press
+                                        },
+                                        icon: const Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                        ),
+                                        label: const Text(
+                                          'My list',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                          side: const BorderSide(
+                                            width: 2,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
-                              ),
-                            ],
-                          );
-                        },
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -216,7 +234,7 @@ class _HomeState extends State<HomeScreen> {
               child: Consumer<AnimeProvider>(
                 builder: (context, animeProvider, child) {
                   if (animeProvider.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const AnimeListViewLoader();
                   }
 
                   return ListView.builder(
@@ -326,7 +344,7 @@ class _HomeState extends State<HomeScreen> {
               child: Consumer<AnimeProvider>(
                 builder: (context, animeProvider, child) {
                   if (animeProvider.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const AnimeListViewLoader();
                   }
 
                   return ListView.builder(
@@ -403,7 +421,7 @@ class _HomeState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const NewReleasesScreen(),
+                          builder: (context) => const MovieListScreen(),
                         ),
                       );
                     },
@@ -424,7 +442,7 @@ class _HomeState extends State<HomeScreen> {
               child: Consumer<MovieProvider>(
                 builder: (context, movieProvider, child) {
                   if (movieProvider.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const MovieListViewLoader();
                   }
                   
                   return SizedBox(
