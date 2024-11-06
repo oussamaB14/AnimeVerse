@@ -1,7 +1,7 @@
-import 'package:animeverse/app/shared/app_bar.dart';
+import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
 import 'package:animeverse/features/anime/widgets/anime_list_item.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 
 class AnimeListScreen extends StatefulWidget {
   const AnimeListScreen({super.key});
@@ -12,16 +12,26 @@ class AnimeListScreen extends StatefulWidget {
 
 class _AnimeListScreenState extends State<AnimeListScreen> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-            appBar: const MyAppBar(title: 'Top Hits Anime'),
+  void initState() {
+    super.initState();
+    // Fetch the anime list when the screen is first loaded
+    final animeProvider = Provider.of<AnimeProvider>(context, listen: false);
+    animeProvider.fetchAnimeList();
+  }
 
-      body: ListView.builder(
-        itemCount: 10, // Replace with the actual number of items
-        itemBuilder: (context, index) {
-          return const AnimeListItem();
-        },
-      ),
+  @override
+  Widget build(BuildContext context) {
+    final animeProvider = Provider.of<AnimeProvider>(context);
+    return Scaffold(
+      appBar: AppBar(title: const Text('Top Airing Anime')),
+      body: animeProvider.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: animeProvider.animeList.length,
+              itemBuilder: (context, index) {
+                return AnimeListItem(anime: animeProvider.animeList[index]);
+              },
+            ),
     );
   }
 }
