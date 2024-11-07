@@ -6,6 +6,7 @@ import 'package:animeverse/features/movies/providers/movieProvider.dart';
 import 'package:animeverse/features/player/providers/video_provider.dart';
 import 'package:animeverse/features/bookmarks/providers/bookmark_provider.dart';
 import 'package:animeverse/features/anime/providers/search_provider.dart';
+import 'package:animeverse/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,5 +23,6 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (_) => VideoProvider()),
     ChangeNotifierProvider(create: (_) => BookmarkProvider()),
     ChangeNotifierProvider(create: (_) => SearchProvider()),
+    ChangeNotifierProvider(create: (_) => ThemeProvider()),
   ], child: const MainApp()));
 }

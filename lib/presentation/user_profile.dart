@@ -4,6 +4,7 @@ import 'package:animeverse/features/auth/provider/AuthProvider.dart';
 import 'package:animeverse/presentation/download.dart';
 import 'package:animeverse/presentation/edit_user_profile.dart';
 import 'package:animeverse/presentation/notification.dart';
+import 'package:animeverse/presentation/themeSwitcher.dart';
 import 'package:animeverse/theme/AppColors.dart';
 //import 'package:animeverse/theme/AppTextTheme.dart';
 import 'package:flutter/material.dart';
@@ -227,7 +228,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  // Navigate to Settings page
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ThemeswitcherScreen(),
+                    ),
+                  );
                 },
               ),
               ListTile(
