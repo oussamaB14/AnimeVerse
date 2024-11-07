@@ -54,8 +54,8 @@ class MangaApiService {
     }
   }
 
-  Future<List<String>> fetchMangaChapters(String chapterId) async {
-    final url = Uri.parse("$baseUrl/read/$chapterId");
+  Future<List<String>> fetchMangaChapters(String mangaId) async {
+    final url = Uri.parse("$baseUrl/info/$mangaId");
     debugPrint('🔗 [MangaApiService] Fetching chapters URL: $url');
 
     try {
