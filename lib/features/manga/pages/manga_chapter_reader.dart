@@ -11,7 +11,7 @@ class MangaChapterReaderPage extends StatefulWidget {
 }
 
 class _MangaChapterReaderPageState extends State<MangaChapterReaderPage> {
-  late Future<Map<String, dynamic>> _chapterDetails;
+  late Future<List<Map<String, dynamic>>> _chapterDetails;
 
   @override
   void initState() {
@@ -23,35 +23,33 @@ class _MangaChapterReaderPageState extends State<MangaChapterReaderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Read Chapter')),
-      body: FutureBuilder<Map<String, dynamic>>(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _chapterDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No chapter data available'));
           }
 
-          final chapterData = snapshot.data!;
+          final chapters = snapshot.data!;
           return SingleChildScrollView(
             child: Column(
-              children: [
-                // Display chapter image
-                Image.network(chapterData['img']),
-                const SizedBox(height: 16),
-                Text(
-                  chapterData['headerForImage'] ?? 'Chapter Header',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                // Additional content can be added here
-              ],
+              children: chapters.map((chapter) {
+                return Column(
+                  children: [
+                    Image.network(chapter['img']),
+                    const SizedBox(height: 16),
+                    // Additional content can be added here
+                  ],
+                );
+              }).toList(),
             ),
           );
         },
       ),
     );
   }
-} 
+}

@@ -80,25 +80,24 @@ class MangaApiService {
     }
   }
 
-  Future<Map<String, dynamic>> fetchChapter(String chapterId) async {
+  Future<List<Map<String, dynamic>>> fetchChapter(String chapterId) async {
     final url = Uri.parse(
         "https://consumet-api-rosy.vercel.app/manga/mangadex/read/$chapterId");
     debugPrint('🔗 [MangaApiService] Fetching chapter URL: $url');
 
     try {
-      final response = await http.get(url);
-      debugPrint(
-          '📡 [MangaApiService] Response status: ${response.statusCode}');
-      debugPrint('📦 [MangaApiService] Response body: ${response.body}');
+        final response = await http.get(url);
+        debugPrint('📡 [MangaApiService] Response status: ${response.statusCode}');
+        debugPrint('📦 [MangaApiService] Response body: ${response.body}');
 
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        throw Exception("Failed to load chapter: ${response.statusCode}");
-      }
+        if (response.statusCode == 200) {
+            return List<Map<String, dynamic>>.from(json.decode(response.body));
+        } else {
+            throw Exception("Failed to load chapter: ${response.statusCode}");
+        }
     } catch (e) {
-      debugPrint('❌ [MangaApiService] Error fetching chapter: $e');
-      throw Exception("Error fetching chapter: $e");
+        debugPrint('❌ [MangaApiService] Error fetching chapter: $e');
+        throw Exception("Error fetching chapter: $e");
     }
   }
 }
