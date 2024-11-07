@@ -1,6 +1,8 @@
 import 'package:animeverse/features/anime/pages/anime_list.dart';
 import 'package:animeverse/features/anime/widgets/anime_search_icon.dart';
 import 'package:animeverse/features/anime/widgets/home_header_loader.dart';
+import 'package:animeverse/features/manga/pages/manga_list.dart';
+import 'package:animeverse/features/manga/widgets/manga_list_item.dart';
 import 'package:animeverse/presentation/new_release.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import 'package:animeverse/features/movies/providers/movieProvider.dart';
 import 'package:animeverse/features/anime/widgets/anime_listview_loader.dart';
 import 'package:animeverse/features/movies/pages/movies_list.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:animeverse/features/manga/provider/MangaProvider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,6 +34,10 @@ class _HomeState extends State<HomeScreen> {
       provider.fetchAnimeList();
       provider.fetchRecentEpisodes();
       provider.fetchRandomTopAiringAnime();
+
+      Future.microtask(() {
+        Provider.of<MangaProvider>(context, listen: false).fetchMangaList();
+      });
     });
     // Fetch movies when the home page loads
     Future.microtask(() => context.read<MovieProvider>().fetchMovies());
@@ -211,39 +218,7 @@ class _HomeState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Top Hits Anime',
-                    style: GoogleFonts.urbanist(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkDark1,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AnimeListScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'See all',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green.shade500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _custometitle(context, 'Top Hits Anime', const AnimeListScreen()),
             SizedBox(
               height: 155,
               child: Consumer<AnimeProvider>(
@@ -321,40 +296,8 @@ class _HomeState extends State<HomeScreen> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'New Episode Releases',
-                    style: GoogleFonts.urbanist(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkDark1,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NewReleasesScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'See all',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green.shade500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _custometitle(
+                context, 'New Episode Releases', const NewReleasesScreen()),
             SizedBox(
               height: 155,
               child: Consumer<AnimeProvider>(
@@ -419,40 +362,7 @@ class _HomeState extends State<HomeScreen> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Top Hits Movies',
-                    style: GoogleFonts.urbanist(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkDark1,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MovieListScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'See all',
-                      style: GoogleFonts.urbanist(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green.shade500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _custometitle(context, 'Top Hits Movies', const MovieListScreen()),
             SizedBox(
               height: 200,
               child: Consumer<MovieProvider>(
@@ -501,9 +411,99 @@ class _HomeState extends State<HomeScreen> {
                 },
               ),
             ),
+            _custometitle(context, 'Manga', const MangaListScreen()),
+            SizedBox(
+              height: 200,
+              child: Consumer<MangaProvider>(
+                builder: (context, mangaProvider, child) {
+                  if (mangaProvider.isLoading) {
+                    return const MovieListViewLoader();
+                  }
+
+                  return SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: mangaProvider.mangaList.length,
+                      itemBuilder: (context, index) {
+                        final manga = mangaProvider.mangaList[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  manga.image,
+                                  height: 150,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              SizedBox(
+                                width: 100,
+                                child: Text(
+                                  manga.title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+Widget _custometitle(
+  BuildContext context,
+  String title,
+  Widget route,
+) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.urbanist(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: AppColors.darkDark1,
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => route,
+              ),
+            );
+          },
+          child: Text(
+            'See all',
+            style: GoogleFonts.urbanist(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.green.shade500,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
