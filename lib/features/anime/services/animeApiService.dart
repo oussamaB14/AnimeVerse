@@ -155,4 +155,81 @@ class AnimeApiService {
       throw Exception('Error searching anime: $e');
     }
   }
+
+  Future<List<Map<String, String>>> fetchGenreList() async {
+    final url = Uri.parse("$baseUrl/gogoanime/genre/list");
+    
+    try {
+      debugPrint('🔍 [AnimeApiService] Fetching genre list');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> genres = json.decode(response.body);
+        return genres.map((genre) => {
+          'id': genre['id'] as String,
+          'title': genre['title'] as String,
+        }).toList();
+      } else {
+        throw Exception('Failed to load genre list');
+      }
+    } catch (e) {
+      debugPrint('❌ [AnimeApiService] Error fetching genre list: $e');
+      throw Exception('Error fetching genre list');
+    }
+  }
+
+  Future<List<Anime>> searchAnimeWithFilters({
+    required String query,
+    List<String>? genres,
+    String? sortBy,
+    String? year,
+  }) async {
+    if (query.isEmpty && (genres == null || genres.isEmpty)) return [];
+    
+    try {
+      debugPrint('🔍 [AnimeApiService] Searching with filters:');
+      debugPrint('   📝 Query: $query');
+      debugPrint('   🏷️ Genres: $genres');
+      debugPrint('   📅 Year: $year');
+      debugPrint('   🔄 Sort: $sortBy');
+
+      // First get search results
+      List<Anime> results = query.isNotEmpty ? await searchAnime(query) : [];
+      
+      // Apply filters
+      if (genres != null && genres.isNotEmpty) {
+        results = results.where((anime) {
+          return genres.any((genre) => 
+            anime.genres.map((g) => g.toLowerCase()).contains(genre.toLowerCase())
+          );
+        }).toList();
+      }
+
+      // Apply year filter
+      if (year != null && year.isNotEmpty) {
+        results = results.where((anime) => 
+          anime.releaseDate?.contains(year) ?? false
+        ).toList();
+      }
+
+      // Apply sorting
+      if (sortBy != null) {
+        switch (sortBy) {
+          case 'Latest':
+            results.sort((a, b) => (b.releaseDate ?? '').compareTo(a.releaseDate ?? ''));
+            break;
+          case 'Release Date':
+            results.sort((a, b) => (a.releaseDate ?? '').compareTo(b.releaseDate ?? ''));
+            break;
+          // Add more sorting options as needed
+        }
+      }
+
+      debugPrint('✅ [AnimeApiService] Found ${results.length} filtered results');
+      return results;
+    } catch (e) {
+      debugPrint('❌ [AnimeApiService] Error searching with filters: $e');
+      rethrow;
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:animeverse/features/anime/pages/anime_list.dart';
 import 'package:animeverse/features/anime/widgets/anime_search_icon.dart';
+import 'package:animeverse/features/anime/widgets/home_header_loader.dart';
 import 'package:animeverse/presentation/new_release.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,9 @@ import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
 import 'package:animeverse/presentation/anime_details.dart';
 import 'package:provider/provider.dart';
 import 'package:animeverse/features/movies/providers/movieProvider.dart';
-import 'package:animeverse/core/models/movie.dart';
 import 'package:animeverse/features/anime/widgets/anime_listview_loader.dart';
 import 'package:animeverse/features/movies/pages/movies_list.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,9 +33,7 @@ class _HomeState extends State<HomeScreen> {
       provider.fetchRandomTopAiringAnime();
     });
     // Fetch movies when the home page loads
-    Future.microtask(() => 
-      context.read<MovieProvider>().fetchMovies()
-    );
+    Future.microtask(() => context.read<MovieProvider>().fetchMovies());
   }
 
   @override
@@ -62,8 +61,8 @@ class _HomeState extends State<HomeScreen> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withOpacity(0.3),  // Lighter at top
-                          Colors.black.withOpacity(0.7),  // Darker at bottom
+                          Colors.black.withOpacity(0.3), // Lighter at top
+                          Colors.black.withOpacity(0.7), // Darker at bottom
                         ],
                       ),
                     ),
@@ -104,23 +103,37 @@ class _HomeState extends State<HomeScreen> {
                           child: Consumer<AnimeProvider>(
                             builder: (context, provider, child) {
                               if (provider.isLoadingRandom) {
-                                return const CircularProgressIndicator();
+                                return const SizedBox(
+                                  height: 2,
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.transparent,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.primary500),
+                                    minHeight: 2,
+                                  ),
+                                );
                               }
-                              
+
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    provider.randomAnime?.title ?? 'Loading...',
-                                    style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  Skeletonizer(
+                                    enabled: provider
+                                        .isLoadingRandom, // Loading state
+                                    child: Text(
+                                      provider.randomAnime?.title ??
+                                          'Loading...',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    provider.randomAnime?.genres.join(' | ') ?? '',
+                                    provider.randomAnime?.genres.join(' | ') ??
+                                        '',
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -136,8 +149,10 @@ class _HomeState extends State<HomeScreen> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => AnimeDetailsScreen(
-                                                  animeId: provider.randomAnime!.id,
+                                                builder: (context) =>
+                                                    AnimeDetailsScreen(
+                                                  animeId:
+                                                      provider.randomAnime!.id,
                                                 ),
                                               ),
                                             );
@@ -255,7 +270,8 @@ class _HomeState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => AnimeDetailsScreen(
+                                        builder: (context) =>
+                                            AnimeDetailsScreen(
                                           animeId: anime.id,
                                         ),
                                       ),
@@ -444,7 +460,7 @@ class _HomeState extends State<HomeScreen> {
                   if (movieProvider.isLoading) {
                     return const MovieListViewLoader();
                   }
-                  
+
                   return SizedBox(
                     height: 200,
                     child: ListView.builder(
