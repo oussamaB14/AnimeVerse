@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:animeverse/core/models/video_source.dart';
-import 'package:animeverse/core/models/video_server.dart';
 
 class VideoService {
-  final String baseUrl = "https://consumet-api-rosy.vercel.app/anime/animepahe";
+  final String baseUrl = "https://consumet-api-rosy.vercel.app/anime/gogoanime";
 
   Future<List<VideoSource>> fetchVideoSources(String episodeId) async {
     try {
@@ -13,23 +12,20 @@ class VideoService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        
-        // AnimePahe returns quality options differently
-        final Map<String, dynamic> sources = data['sources'];
+        final List<dynamic> sources = data['sources'];
+
         List<VideoSource> videoSources = [];
-        
-        sources.forEach((quality, sourceData) {
-          if (sourceData is Map<String, dynamic> && sourceData.containsKey('url')) {
+        for (var source in sources) {
+          if (source is Map<String, dynamic> && source.containsKey('url')) {
             videoSources.add(
               VideoSource(
-                url: sourceData['url'] as String,
-                quality: quality,
+                url: source['url'] as String,
+                quality: source['quality'] as String, // Assuming quality is provided
                 isM3U8: false,
               ),
             );
           }
-        });
-        
+        }
         return videoSources;
       } else {
         print("Error response: ${response.body}");

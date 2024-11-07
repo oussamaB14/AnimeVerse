@@ -11,7 +11,6 @@ class VideoProvider with ChangeNotifier {
   ChewieController? _chewieController;
   bool _isLoading = false;
   String? _selectedQuality;
-  String? _currentEpisodeId;
 
   List<VideoSource> get videoSources => _videoSources;
   VideoPlayerController? get videoPlayerController => _videoPlayerController;
@@ -21,7 +20,6 @@ class VideoProvider with ChangeNotifier {
 
   Future<void> initializeVideo(String episodeId) async {
     _isLoading = true;
-    _currentEpisodeId = episodeId;
     notifyListeners();
 
     try {
@@ -32,6 +30,8 @@ class VideoProvider with ChangeNotifier {
         // Select the highest quality by default
         _selectedQuality = _videoSources.first.quality;
         await _initializePlayer(_videoSources.first.url);
+      } else {
+        throw Exception("No video sources available");
       }
     } catch (e) {
       print('Error initializing video: $e');
@@ -41,54 +41,35 @@ class VideoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeQuality(String quality) async {
-    final newSource = _videoSources.firstWhere((source) => source.quality == quality);
-    _selectedQuality = quality;
-
-    // Store current position
-    final position = await _videoPlayerController?.position;
-
-    // Initialize new player with selected quality
-    await _initializePlayer(newSource.url);
-
-    // Seek to previous position
-    if (position != null) {
-      await _videoPlayerController?.seekTo(position);
-    }
-
-    notifyListeners();
-  }
-
   Future<void> _initializePlayer(String videoUrl) async {
     // Dispose existing controllers
     dispose();
 
     try {
       // Create and initialize video player controller
-      _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      _videoPlayerController = VideoPlayerController.network(videoUrl);
       await _videoPlayerController?.initialize();
 
-      // Create chewie controller
+      // Create Chewie controller
       _chewieController = ChewieController(
         videoPlayerController: _videoPlayerController!,
         autoPlay: true,
         looping: false,
-        aspectRatio: 16 / 9,
-        allowFullScreen: true,
-        allowMuting: true,
-        showControls: true,
+        // Customize the controls as needed
+        materialProgressColors: ChewieProgressColors(
+          playedColor: Colors.red,
+          handleColor: Colors.blue,
+          backgroundColor: Colors.grey,
+          bufferedColor: Colors.lightGreen,
+        ),
         errorBuilder: (context, errorMessage) {
           return Center(
             child: Text(
-              'Error: $errorMessage',
+              errorMessage,
               style: const TextStyle(color: Colors.white),
             ),
           );
         },
-        placeholder: Container(
-          color: Colors.black,
-          child: const Center(child: CircularProgressIndicator()),
-        ),
       );
     } catch (e) {
       print('Error initializing player: $e');
@@ -103,5 +84,6 @@ class VideoProvider with ChangeNotifier {
     _chewieController?.dispose();
     _videoPlayerController = null;
     _chewieController = null;
+    super.dispose();
   }
 }

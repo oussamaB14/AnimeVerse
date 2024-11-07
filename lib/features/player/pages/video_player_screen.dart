@@ -1,5 +1,4 @@
 import 'package:animeverse/features/player/providers/video_provider.dart';
-import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:chewie/chewie.dart';
@@ -11,10 +10,10 @@ class VideoPlayerScreen extends StatefulWidget {
   final String title;
 
   const VideoPlayerScreen({
-    super.key,
+    Key? key,
     required this.episodeId,
     required this.title,
-  });
+  }) : super(key: key);
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
@@ -32,9 +31,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     // Hide status bar and navigation bar
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<VideoProvider>().initializeVideo(widget.episodeId);
-    });
+    // Initialize video player
+    _initializePlayer();
+  }
+
+  Future<void> _initializePlayer() async {
+    final videoProvider = context.read<VideoProvider>();
+    await videoProvider.initializeVideo(widget.episodeId);
+
+    // Rebuild widget once the controller is initialized
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -49,56 +57,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
-    context.read<VideoProvider>().dispose();
-    super.dispose();
-  }
 
-  ChewieController _createChewieController(VideoProvider provider) {
-    return ChewieController(
-      videoPlayerController: provider.videoPlayerController!,
-      autoPlay: true,
-      looping: false,
-      allowFullScreen: true,
-      showControls: true,
-      allowMuting: true,
-      allowPlaybackSpeedChanging: true,
-      customControls: const CupertinoControls(
-        backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
-        iconColor: Colors.white,
-      ),
-      // Customize the player theme
-      materialProgressColors: ChewieProgressColors(
-        playedColor: AppColors.primary500,
-        handleColor: AppColors.primary500,
-        backgroundColor: Colors.grey,
-        bufferedColor: Colors.grey[300]!,
-      ),
-      errorBuilder: (context, errorMessage) {
-        return Center(
-          child: Text(
-            errorMessage,
-            style: const TextStyle(color: Colors.white),
-          ),
-        );
-      },
-      // Add additional options
-      deviceOrientationsAfterFullScreen: [
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ],
-      placeholder: Container(
-        color: Colors.black,
-        child: const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.primary500,
-          ),
-        ),
-      ),
-    );
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final videoProvider = context.watch<VideoProvider>();
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -107,72 +73,34 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           widget.title,
           style: GoogleFonts.urbanist(color: Colors.white),
         ),
-        actions: [
-          Consumer<VideoProvider>(
-            builder: (context, provider, child) {
-              if (provider.videoSources.isEmpty) return const SizedBox();
-              
-              return Row(
-                children: [
-                  // Quality selector
-                  PopupMenuButton<String>(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    onSelected: (quality) {
-                      provider.changeQuality(quality);
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return provider.videoSources.map((source) {
-                        return PopupMenuItem<String>(
-                          value: source.quality,
-                          child: Text(
-                            source.quality,
-                            style: TextStyle(
-                              color: source.quality == provider.selectedQuality
-                                  ? AppColors.primary500
-                                  : Colors.black,
-                              fontWeight: source.quality == provider.selectedQuality
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        );
-                      }).toList();
-                    },
+      ),
+      body: videoProvider.chewieController != null
+          ? Column(
+              children: [
+                Expanded(
+                  child: Chewie(
+                    controller: videoProvider.chewieController!,
                   ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-      body: Consumer<VideoProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primary500,
-              ),
-            );
-          }
-
-          if (provider.chewieController == null) {
-            return const Center(
-              child: Text(
-                'Failed to load video',
-                style: TextStyle(color: Colors.white),
-              ),
-            );
-          }
-
-          return SafeArea(
-            child: Center(
-              child: Chewie(
-                controller: _createChewieController(provider),
-              ),
-            ),
-          );
-        },
-      ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (videoProvider.chewieController!.isPlaying) {
+                        videoProvider.chewieController!.pause();
+                      } else {
+                        videoProvider.chewieController!.play();
+                      }
+                    },
+                    child: Text(
+                      videoProvider.chewieController!.isPlaying ? 'Pause' : 'Play',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : const Center(child: CircularProgressIndicator()), // Show loading indicator while initializing
     );
   }
-} 
+}
