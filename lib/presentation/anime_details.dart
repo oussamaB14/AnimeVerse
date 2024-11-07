@@ -9,6 +9,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:animeverse/features/bookmarks/providers/bookmark_provider.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
   final String animeId;
@@ -372,39 +373,49 @@ class _AnimeDetailsScreenState extends State<AnimeDetailsScreen> {
 }
 
 Widget _animeTitleRow(String animeTitle) {
-  final bookmarked = ValueNotifier<bool>(false);
+  return Consumer<BookmarkProvider>(
+    builder: (context, bookmarkProvider, child) {
+      return FutureBuilder<bool>(
+        future: bookmarkProvider.isBookmarked(context.read<AnimeProvider>().animeDetails?.id ?? ''),
+        builder: (context, snapshot) {
+          final isBookmarked = snapshot.data ?? false;
 
-  return Row(
-    children: [
-      Text(
-        animeTitle.length > 20
-            ? '${animeTitle.substring(0, 20)}...'
-            : animeTitle,
-        style: GoogleFonts.urbanist(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-          color: AppColors.darkDark3,
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      const Spacer(),
-      IconButton(
-        onPressed: () {
-          bookmarked.value = !bookmarked.value;
+          return Row(
+            children: [
+              Text(
+                animeTitle.length > 20
+                    ? '${animeTitle.substring(0, 20)}...'
+                    : animeTitle,
+                style: GoogleFonts.urbanist(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.darkDark3,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: () async {
+                  final anime = context.read<AnimeProvider>().animeDetails;
+                  if (anime != null) {
+                    await bookmarkProvider.toggleAnimeBookmark(
+                      anime,
+                      context: context,
+                    );
+                  }
+                },
+                icon: HeroIcon(
+                  HeroIcons.bookmark,
+                  color: AppColors.primary500,
+                  style: isBookmarked ? HeroIconStyle.solid : HeroIconStyle.outline,
+                ),
+              ),
+            ],
+          );
         },
-        icon: ValueListenableBuilder<bool>(
-          valueListenable: bookmarked,
-          builder: (context, value, child) {
-            return HeroIcon(
-              HeroIcons.bookmark,
-              color: AppColors.primary500,
-              style: value ? HeroIconStyle.solid : HeroIconStyle.outline,
-            );
-          },
-        ),
-      ),
-    ],
+      );
+    },
   );
 }
 

@@ -1,6 +1,7 @@
 import 'package:animeverse/presentation/home.dart';
 import 'package:animeverse/presentation/release_calander.dart';
 import 'package:animeverse/presentation/user_profile.dart';
+import 'package:animeverse/features/bookmarks/pages/bookmarks_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
@@ -20,7 +21,7 @@ class _AppWrapperState extends State<AppWrapper> {
   final List<Widget> _pages = [
     const HomeScreen(),
     const ReleaseCalanderScreen(),
-    const MyListScreen(),
+    const BookmarksScreen(),
     const DownloadsScreen(),
     const UserProfileScreen(),
   ];

@@ -1,5 +1,6 @@
 import 'package:animeverse/core/models/anime.dart';
 import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
+import 'package:animeverse/features/bookmarks/providers/bookmark_provider.dart';
 import 'package:animeverse/presentation/anime_details.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,14 @@ class AnimeListItem extends StatefulWidget {
 }
 
 class _AnimeListItemState extends State<AnimeListItem> {
-  bool _isAdded = false;
+  late Future<bool> _isBookmarkedFuture;
+  bool _isProcessing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isBookmarkedFuture = context.read<BookmarkProvider>().isBookmarked(widget.anime.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +70,7 @@ class _AnimeListItemState extends State<AnimeListItem> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Text(
-                        '4.5', // You can replace this with an actual rating if available
+                        '4.5',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -86,13 +94,6 @@ class _AnimeListItemState extends State<AnimeListItem> {
                         color: AppColors.darkDark3,
                       ),
                     ),
-                    // const SizedBox(height: 4),
-                    // Text(
-                    //   widget.anime.genres.join(' | '),
-                    //   style: Theme.of(context).textTheme.bodySmall,
-                    //   maxLines: 1,
-                    //   overflow: TextOverflow.ellipsis,
-                    // ),
                     const SizedBox(height: 8),
                     Row(children: [
                       const HugeIcon(
@@ -111,34 +112,65 @@ class _AnimeListItemState extends State<AnimeListItem> {
                       ),
                     ]),
                     const SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isAdded = !_isAdded;
-                        });
-                      },
-                      child: Chip(
-                        label: Text(
-                          'My List',
-                          style: TextStyle(
-                            color: _isAdded ? Colors.green : Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                    FutureBuilder<bool>(
+                      future: _isBookmarkedFuture,
+                      builder: (context, snapshot) {
+                        final isBookmarked = snapshot.data ?? false;
+                        
+                        return GestureDetector(
+                          onTap: _isProcessing ? null : () async {
+                            setState(() {
+                              _isProcessing = true;
+                            });
+                            
+                            try {
+                              await context.read<BookmarkProvider>().toggleAnimeBookmark(
+                                widget.anime,
+                                context: context,
+                              );
+                              setState(() {
+                                _isBookmarkedFuture = context.read<BookmarkProvider>().isBookmarked(widget.anime.id);
+                              });
+                            } finally {
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                            }
+                          },
+                          child: Chip(
+                            label: _isProcessing 
+                              ? const SizedBox(
+                                  width: 12,
+                                  height: 12,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.secondary500),
+                                  ),
+                                )
+                              : Text(
+                                  'My List',
+                                  style: TextStyle(
+                                    color: isBookmarked ? Colors.green : Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                            backgroundColor: isBookmarked ? Colors.transparent : Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(80),
+                              side: const BorderSide(color: Colors.green),
+                            ),
+                            avatar: _isProcessing 
+                              ? null
+                              : Icon(
+                                  isBookmarked ? Icons.done : Icons.add,
+                                  color: isBookmarked ? Colors.green : Colors.white,
+                                  size: 16,
+                                ),
+                            visualDensity: VisualDensity.compact,
                           ),
-                        ),
-                        backgroundColor:
-                            _isAdded ? Colors.transparent : Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80),
-                          side: const BorderSide(color: Colors.green),
-                        ),
-                        avatar: Icon(
-                          _isAdded ? Icons.done : Icons.add,
-                          color: _isAdded ? Colors.green : Colors.white,
-                          size: 16,
-                        ),
-                        visualDensity: VisualDensity.compact,
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),

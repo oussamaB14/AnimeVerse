@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:animeverse/core/models/anime.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 
@@ -103,6 +104,55 @@ class AnimeApiService {
     } catch (e) {
       print("Error fetching random top airing anime: $e");
       return null;
+    }
+  }
+
+  Future<List<Anime>> searchAnime(String query) async {
+    if (query.isEmpty) return [];
+    
+    // Update the URL to match the correct endpoint structure
+    final url = Uri.parse("$baseUrl/gogoanime/${Uri.encodeComponent(query)}");
+    
+    try {
+      debugPrint('🔍 [AnimeApiService] Searching for: $query');
+      debugPrint('🔗 [AnimeApiService] URL: $url');
+      
+      final response = await http.get(url);
+      debugPrint('📡 [AnimeApiService] Response status: ${response.statusCode}');
+      debugPrint('📦 [AnimeApiService] Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        final List<dynamic> results = jsonResponse['results'] ?? [];
+        
+        debugPrint('✅ [AnimeApiService] Found ${results.length} results');
+        
+        if (results.isEmpty) {
+          debugPrint('⚠️ [AnimeApiService] No results found');
+          return [];
+        }
+
+        final animeList = results.map((animeJson) {
+          try {
+            return Anime.fromListingJson(animeJson);
+          } catch (e) {
+            debugPrint('❌ [AnimeApiService] Error parsing anime: $e');
+            debugPrint('📄 [AnimeApiService] Problematic JSON: $animeJson');
+            return null;
+          }
+        }).whereType<Anime>().toList();
+
+        debugPrint('✅ [AnimeApiService] Successfully parsed ${animeList.length} anime');
+        return animeList;
+      } else {
+        debugPrint('❌ [AnimeApiService] Search failed: ${response.statusCode}');
+        debugPrint('❌ [AnimeApiService] Error body: ${response.body}');
+        throw Exception('Failed to search anime');
+      }
+    } catch (e, stackTrace) {
+      debugPrint('❌ [AnimeApiService] Search error: $e');
+      debugPrint('📍 [AnimeApiService] Stack trace: $stackTrace');
+      throw Exception('Error searching anime: $e');
     }
   }
 }
