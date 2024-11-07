@@ -11,7 +11,6 @@ class VideoProvider with ChangeNotifier {
   ChewieController? _chewieController;
   bool _isLoading = false;
   String? _selectedQuality;
-  bool _disposed = false;
 
   List<VideoSource> get videoSources => _videoSources;
   VideoPlayerController? get videoPlayerController => _videoPlayerController;
@@ -20,12 +19,12 @@ class VideoProvider with ChangeNotifier {
   String? get selectedQuality => _selectedQuality;
 
   Future<void> initializeVideo(String episodeId) async {
-    if (_disposed) return;
-    
     _isLoading = true;
     notifyListeners();
 
     try {
+      await cleanupControllers();
+      
       // Fetch video sources
       _videoSources = await _videoService.fetchVideoSources(episodeId);
 
@@ -40,24 +39,15 @@ class VideoProvider with ChangeNotifier {
       debugPrint('Error initializing video: $e');
     }
 
-    if (!_disposed) {
-      _isLoading = false;
-      notifyListeners();
-    }
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> _initializePlayer(String videoUrl) async {
-    if (_disposed) return;
-
-    // Dispose existing controllers
-    await _disposeControllers();
-
     try {
       // Create and initialize video player controller
       _videoPlayerController = VideoPlayerController.network(videoUrl);
       await _videoPlayerController?.initialize();
-
-      if (_disposed) return;
 
       // Create Chewie controller
       _chewieController = ChewieController(
@@ -77,17 +67,13 @@ class VideoProvider with ChangeNotifier {
         ),
       );
 
-      if (!_disposed) {
-        notifyListeners();
-      }
+      notifyListeners();
     } catch (e) {
       debugPrint('Error initializing player: $e');
     }
   }
 
   Future<void> changeVideoQuality(String quality) async {
-    if (_disposed) return;
-    
     final selectedSource = _videoSources.firstWhere(
       (source) => source.quality == quality,
       orElse: () => _videoSources.first,
@@ -98,8 +84,8 @@ class VideoProvider with ChangeNotifier {
     await _videoPlayerController?.seekTo(currentPosition ?? Duration.zero);
   }
 
-  Future<void> _disposeControllers() async {
-    _chewieController?.dispose();
+  Future<void> cleanupControllers() async {
+     _chewieController?.dispose();
     await _videoPlayerController?.dispose();
     _chewieController = null;
     _videoPlayerController = null;
@@ -107,8 +93,9 @@ class VideoProvider with ChangeNotifier {
 
   @override
   void dispose() {
-    _disposed = true;
-    _disposeControllers();
+    cleanupControllers();
+    _videoSources = [];
+    _selectedQuality = null;
     super.dispose();
   }
 }

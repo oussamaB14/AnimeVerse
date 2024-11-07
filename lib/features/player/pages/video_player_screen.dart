@@ -67,6 +67,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
+    _videoProvider.cleanupControllers();
     super.dispose();
   }
 
@@ -74,8 +75,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Ensure proper cleanup when navigating back
-        _videoProvider.dispose();
+        await _videoProvider.cleanupControllers();
         return true;
       },
       child: Scaffold(
@@ -85,6 +85,15 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           title: Text(
             widget.title,
             style: const TextStyle(color: Colors.white),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () async {
+              await _videoProvider.cleanupControllers();
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
+            },
           ),
         ),
         body: Consumer<VideoProvider>(
