@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:chewie/chewie.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final String episodeId;
@@ -20,15 +19,19 @@ class VideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  late final VideoProvider _videoProvider;
+  bool _isInitialized = false;
+
   @override
   void initState() {
     super.initState();
+    _videoProvider = context.read<VideoProvider>();
+    
     // Set landscape orientation when entering video player
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    // Hide status bar and navigation bar
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     // Initialize video player
@@ -36,12 +39,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   Future<void> _initializePlayer() async {
-    final videoProvider = context.read<VideoProvider>();
-    await videoProvider.initializeVideo(widget.episodeId);
-
-    // Rebuild widget once the controller is initialized
-    if (mounted) {
-      setState(() {});
+    try {
+      await _videoProvider.initializeVideo(widget.episodeId);
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error initializing video: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading video: $e')),
+        );
+      }
     }
   }
 
@@ -52,55 +63,73 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    // Show status bar and navigation bar
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final videoProvider = context.watch<VideoProvider>();
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(
-          widget.title,
-          style: GoogleFonts.urbanist(color: Colors.white),
+    return WillPopScope(
+      onWillPop: () async {
+        // Ensure proper cleanup when navigating back
+        _videoProvider.dispose();
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            widget.title,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-      body: videoProvider.chewieController != null
-          ? Column(
+        body: Consumer<VideoProvider>(
+          builder: (context, videoProvider, child) {
+            if (videoProvider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (!_isInitialized || videoProvider.chewieController == null) {
+              return const Center(child: Text('Loading video...'));
+            }
+
+            return Column(
               children: [
                 Expanded(
                   child: Chewie(
                     controller: videoProvider.chewieController!,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (videoProvider.chewieController!.isPlaying) {
-                        videoProvider.chewieController!.pause();
-                      } else {
-                        videoProvider.chewieController!.play();
-                      }
-                    },
-                    child: Text(
-                      videoProvider.chewieController!.isPlaying ? 'Pause' : 'Play',
+                // Quality selector
+                if (videoProvider.videoSources.length > 1)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButton<String>(
+                      value: videoProvider.selectedQuality,
+                      dropdownColor: Colors.black87,
                       style: const TextStyle(color: Colors.white),
+                      items: videoProvider.videoSources.map((source) {
+                        return DropdownMenuItem<String>(
+                          value: source.quality,
+                          child: Text(source.quality),
+                        );
+                      }).toList(),
+                      onChanged: (newQuality) {
+                        if (newQuality != null) {
+                          videoProvider.changeVideoQuality(newQuality);
+                        }
+                      },
                     ),
                   ),
-                ),
               ],
-            )
-          : const Center(child: CircularProgressIndicator()), // Show loading indicator while initializing
+            );
+          },
+        ),
+      ),
     );
   }
 }
