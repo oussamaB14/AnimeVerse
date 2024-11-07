@@ -364,7 +364,7 @@ class _HomeState extends State<HomeScreen> {
             ),
             _custometitle(context, 'Top Hits Movies', const MovieListScreen()),
             SizedBox(
-              height: 200,
+              height: 190,
               child: Consumer<MovieProvider>(
                 builder: (context, movieProvider, child) {
                   if (movieProvider.isLoading) {
