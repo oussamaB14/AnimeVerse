@@ -1,3 +1,4 @@
+import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:animeverse/core/models/video_source.dart';
 import 'package:animeverse/features/player/services/video_service.dart';
@@ -46,7 +47,7 @@ class VideoProvider with ChangeNotifier {
   Future<void> _initializePlayer(String videoUrl) async {
     try {
       // Create and initialize video player controller
-      _videoPlayerController = VideoPlayerController.network(videoUrl);
+      _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
       await _videoPlayerController?.initialize();
 
       // Create Chewie controller
@@ -60,10 +61,10 @@ class VideoProvider with ChangeNotifier {
         showControls: true,
         placeholder: const Center(child: CircularProgressIndicator()),
         materialProgressColors: ChewieProgressColors(
-          playedColor: Colors.red,
-          handleColor: Colors.blue,
+          playedColor: Colors.white,
+          handleColor: AppColors.primary500,
           backgroundColor: Colors.grey,
-          bufferedColor: Colors.lightGreen,
+          bufferedColor: AppColors.primary200,
         ),
       );
 
