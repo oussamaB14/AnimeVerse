@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
 import 'package:animeverse/presentation/anime_details.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:animeverse/features/movies/providers/movieProvider.dart';
 import 'package:animeverse/features/anime/widgets/anime_listview_loader.dart';
@@ -243,14 +244,14 @@ class _HomeState extends State<HomeScreen> {
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AnimeDetailsScreen(
-                                          animeId: anime.id,
-                                        ),
-                                      ),
-                                    );
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.leftToRight,
+                                            child: AnimeDetailsScreen(
+                                                animeId: anime.id))
+                                      
+                                        );
                                   },
                                   child: Container(
                                     width: 120,

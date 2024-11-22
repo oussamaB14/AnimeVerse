@@ -81,8 +81,10 @@ class _AnimeDetailsScreenState extends State<AnimeDetailsScreen> {
                     padding: const EdgeInsets.all(12.0),
                     child: SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _animeTitleRow(anime.title),
+                          Text(anime.otherName.toString()),
                           _animeDetailsInfoRow(
                               rate: '9.2',
                               year: anime.releaseDate.toString(),
@@ -255,16 +257,17 @@ class _AnimeDetailsScreenState extends State<AnimeDetailsScreen> {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Action | Comedy | Shounen | Josei |Fun ",
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                              anime.genres.join(", "),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w500),
                             ),
                           ),
                           const SizedBox(height: 10),
                           _animeDescriptionWidget(anime.description.toString()),
-                          _episodesListTitle(["Season 1", "Season 2"]),
+                          //_episodesListTitle(["Season 1", "Season 2"]),
                           // SizedBox(
                           //   height: 150,
                           //   child: ListView.builder(
@@ -349,17 +352,6 @@ class _AnimeDetailsScreenState extends State<AnimeDetailsScreen> {
                           //   ),
                           // ),
                           _buildEpisodesSection(anime),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "More Like This",
-                              style: GoogleFonts.urbanist(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.darkDark3,
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -376,7 +368,8 @@ Widget _animeTitleRow(String animeTitle) {
   return Consumer<BookmarkProvider>(
     builder: (context, bookmarkProvider, child) {
       return FutureBuilder<bool>(
-        future: bookmarkProvider.isBookmarked(context.read<AnimeProvider>().animeDetails?.id ?? ''),
+        future: bookmarkProvider
+            .isBookmarked(context.read<AnimeProvider>().animeDetails?.id ?? ''),
         builder: (context, snapshot) {
           final isBookmarked = snapshot.data ?? false;
 
@@ -408,7 +401,9 @@ Widget _animeTitleRow(String animeTitle) {
                 icon: HeroIcon(
                   HeroIcons.bookmark,
                   color: AppColors.primary500,
-                  style: isBookmarked ? HeroIconStyle.solid : HeroIconStyle.outline,
+                  style: isBookmarked
+                      ? HeroIconStyle.solid
+                      : HeroIconStyle.outline,
                 ),
               ),
             ],
