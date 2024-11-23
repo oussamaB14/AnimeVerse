@@ -249,9 +249,7 @@ class _HomeState extends State<HomeScreen> {
                                             type:
                                                 PageTransitionType.leftToRight,
                                             child: AnimeDetailsScreen(
-                                                animeId: anime.id))
-                                      
-                                        );
+                                                animeId: anime.id)));
                                   },
                                   child: Container(
                                     width: 120,
@@ -483,7 +481,9 @@ Widget _custometitle(
           style: GoogleFonts.urbanist(
             fontSize: 24,
             fontWeight: FontWeight.w700,
-            color: AppColors.darkDark1,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : AppColors.darkDark1,
           ),
         ),
         TextButton(
