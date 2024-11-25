@@ -76,15 +76,6 @@ class SignupScreen extends StatelessWidget {
                         // Handle Google sign up
                       },
                     ),
-                    const SizedBox(width: 10),
-                    _buildSocialButton(
-                      color: Colors.blueAccent,
-                      icon: Icons.facebook,
-                      label: 'Facebook',
-                      onPressed: () {
-                        // Handle Facebook sign up
-                      },
-                    ),
                   ],
                 ),
                 const SizedBox(height: 20),

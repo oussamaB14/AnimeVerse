@@ -1,3 +1,4 @@
+import 'package:animeverse/features/auth/pages/signin_with_password.dart';
 import 'package:animeverse/features/auth/pages/signup.dart';
 import 'package:animeverse/features/auth/provider/AuthProvider.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,6 @@ class SignInScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 _buildHeader(),
                 const SizedBox(height: 40),
-                _buildSocialButton(
-                  iconUrl:
-                      'https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0Re26C0t0tieWblXnFog%2F71a7e668-8912-4017-a589-5ab634cf8325.png',
-                  text: 'Continue with Facebook',
-                  onPressed: () {},
-                ),
                 const SizedBox(height: 16),
                 _buildSocialButton(
                   iconUrl:
@@ -41,7 +36,7 @@ class SignInScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 _buildDividerWithText(),
                 const SizedBox(height: 20),
-                _buildSignInButton(),
+                _buildSignInButton(context),
                 const SizedBox(height: 20),
                 _buildSignUpPrompt(context),
               ],
@@ -56,36 +51,7 @@ class SignInScreen extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Transform.rotate(
-          angle: 90 * 3.14 / 180,
-          child: Image.network(
-            'https://static.vecteezy.com/system/resources/thumbnails/022/385/025/small_2x/a-cute-surprised-black-haired-anime-girl-under-the-blooming-sakura-ai-generated-photo.jpg',
-            width: 16,
-            height: 19,
-            fit: BoxFit.contain,
-          ),
-        ),
-        Positioned(
-          top: 0,
-          child: Image.network(
-            'https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0Re26C0t0tieWblXnFog%2F30379b21-8fff-4f6c-a848-ba1e6be1c59a.png',
-            width: 237,
-            height: 200,
-            fit: BoxFit.contain,
-          ),
-        ),
-        Positioned(
-          top: 17,
-          child: Opacity(
-            opacity: 0.1,
-            child: Image.network(
-              'https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0Re26C0t0tieWblXnFog%2F444b4475-e551-41ec-b454-aa18d648689c.png',
-              width: 110,
-              height: 102,
-              fit: BoxFit.contain,
-            ),
-          ),
-        ),
+        Image.asset('assets/icon.png'),
       ],
     );
   }
@@ -155,7 +121,7 @@ class SignInScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSignInButton() {
+  Widget _buildSignInButton(context) {
     return Container(
       width: double.infinity,
       height: 58,
@@ -171,7 +137,13 @@ class SignInScreen extends StatelessWidget {
         ],
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SigninWithPassword(),
+            ),
+          );
+        },
         child: Text(
           'Sign in with password',
           style: GoogleFonts.urbanist(
