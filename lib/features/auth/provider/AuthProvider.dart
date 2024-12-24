@@ -11,6 +11,7 @@ class AuthProvider with ChangeNotifier {
   User? get user => _user;
 
   AuthProvider() {
+    _auth.setLanguageCode('en');
     _auth.authStateChanges().listen(_onAuthStateChanged);
   }
 
@@ -22,10 +23,13 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> signUpWithEmail(String email, String password) async {
+  Future<void> signUpWithEmail(String email, String password, String firstName, String lastName) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      
+      // Update the user's display name
+      await userCredential.user?.updateDisplayName('$firstName $lastName');
     } catch (e) {
       print('Error during sign up: $e');
     }

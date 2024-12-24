@@ -10,7 +10,6 @@ import 'package:animeverse/presentation/settings/privacy_policy_page.dart';
 import 'package:animeverse/presentation/settings/security_page.dart';
 import 'package:animeverse/presentation/settings/themeSwitcher.dart';
 import 'package:animeverse/theme/AppColors.dart';
-//import 'package:animeverse/theme/AppTextTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -33,9 +32,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       // Create a User object from the firebaseUser
       User user = User(
         id: firebaseUser.uid,
-        email: firebaseUser.email!, nom: firebaseUser.displayName!, prenom: '',
-        userAvatar: firebaseUser.photoURL!,
-        // You can add other fields here if you need them
+        email: firebaseUser.email ?? 'No email',
+        nom: firebaseUser.displayName ?? 'No name',
+        prenom: '',
+        userAvatar: firebaseUser.photoURL ?? 'https://avatars.githubusercontent.com/u/49993491?v=4',
       );
 
       return Scaffold(
@@ -60,8 +60,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 40,
-                          backgroundImage: NetworkImage(
-                              user.userAvatar), // Placeholder image
+                          backgroundImage: NetworkImage(user.userAvatar),
                         ),
                         const Positioned(
                           bottom: 0,
@@ -195,10 +194,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                // const HugeIcon(
-                                //   icon: HugeIcons.strokeRoundedSolidLine01,
-                                //   color: AppColors.greyscale500,
-                                // ),
                                 const Divider(
                                     thickness: 2,
                                     indent: 160,

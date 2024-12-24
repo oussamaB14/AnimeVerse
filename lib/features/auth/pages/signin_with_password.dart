@@ -1,7 +1,9 @@
+import 'package:animeverse/app/routes/app_wrapper.dart';
+import 'package:animeverse/features/auth/provider/AuthProvider.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:provider/provider.dart';
 
 class SigninWithPassword extends StatefulWidget {
   const SigninWithPassword({super.key});
@@ -11,6 +13,9 @@ class SigninWithPassword extends StatefulWidget {
 }
 
 class _SigninWithPasswordState extends State<SigninWithPassword> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,23 +28,46 @@ class _SigninWithPasswordState extends State<SigninWithPassword> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const TextField(
-                decoration: InputDecoration(
+              ClipRRect(
+                borderRadius: BorderRadius.circular(2),
+                child: Image.asset(
+                  'assets/icon.png',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
+              TextField(
+                controller: passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  // Handle sign in action
+                  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                  await authProvider.signInWithEmail(
+                    emailController.text,
+                    passwordController.text,
+                  );
+
+                  // Optionally, navigate to the home screen or another page after successful sign-in
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const AppWrapper(),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary500,
                   minimumSize: const Size(double.infinity, 30),
@@ -68,8 +96,12 @@ class _SigninWithPasswordState extends State<SigninWithPassword> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(HugeIcons.strokeRoundedGoogle),
+                onPressed: () {
+                  // Handle Google sign-in
+                },
+                icon: const Icon(
+                  Icons.g_mobiledata,
+                ),
                 label: const Text('Sign in with Google'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,

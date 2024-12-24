@@ -223,36 +223,36 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   const SizedBox(height: 24),
 
                   // More Like This Section
-                  const Text(
-                    'More Like This',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.darkDark3,
-                    ),
-                  ),
+                  // const Text(
+                  //   'More Like This',
+                  //   style: TextStyle(
+                  //     fontSize: 20,
+                  //     fontWeight: FontWeight.bold,
+                  //     color: AppColors.darkDark3,
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    height: 200,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              widget.movie.image,
-                              width: 120,
-                              height: 180,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 200,
+                  //   child: ListView.builder(
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemCount: 5,
+                  //     itemBuilder: (context, index) {
+                  //       return Padding(
+                  //         padding: const EdgeInsets.only(right: 12),
+                  //         child: ClipRRect(
+                  //           borderRadius: BorderRadius.circular(8),
+                  //           child: Image.network(
+                  //             widget.movie.image,
+                  //             width: 120,
+                  //             height: 180,
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),

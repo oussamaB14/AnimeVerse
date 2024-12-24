@@ -1,5 +1,5 @@
 import 'package:animeverse/features/anime/widgets/anime_list_loader.dart';
-import 'package:animeverse/features/movies/providers/movieProvider.dart';
+import 'package:animeverse/features/movies/pages/providers/movieProvider.dart';
 import 'package:animeverse/features/movies/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

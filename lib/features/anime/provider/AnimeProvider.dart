@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animeverse/features/anime/services/animeApiService.dart';
 import 'package:animeverse/core/models/anime.dart';
+import 'package:animeverse/core/models/news.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AnimeProvider with ChangeNotifier {
   final AnimeApiService _animeApiService = AnimeApiService();
@@ -10,6 +13,9 @@ class AnimeProvider with ChangeNotifier {
   Anime? _animeDetails;
   Anime? _randomAnime;
   bool _isLoadingRandom = false;
+  List<AnimeNews> _news = [];
+  bool _isLoadingNews = false;
+  String? _newsError;
 
   List<Anime> get animeList => _animeList;
   List<Anime> get recentEpisodes => _recentEpisodes;
@@ -17,6 +23,9 @@ class AnimeProvider with ChangeNotifier {
   Anime? get animeDetails => _animeDetails;
   Anime? get randomAnime => _randomAnime;
   bool get isLoadingRandom => _isLoadingRandom;
+  List<AnimeNews> get news => _news;
+  bool get isLoadingNews => _isLoadingNews;
+  String? get newsError => _newsError;
 
   // Fetching anime list
   Future<void> fetchAnimeList() async {
@@ -84,5 +93,29 @@ class AnimeProvider with ChangeNotifier {
 
     _isLoadingRandom = false;
     notifyListeners();
+  }
+
+  Future<void> fetchNews() async {
+    try {
+      _isLoadingNews = true;
+      _newsError = null;
+      notifyListeners();
+
+      final response = await http.get(
+        Uri.parse('https://consumet-api-rosy.vercel.app/news/ann/recent-feeds'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        _news = jsonData.map((item) => AnimeNews.fromJson(item)).toList();
+      } else {
+        _newsError = 'Failed to load news';
+      }
+    } catch (e) {
+      _newsError = e.toString();
+    } finally {
+      _isLoadingNews = false;
+      notifyListeners();
+    }
   }
 }

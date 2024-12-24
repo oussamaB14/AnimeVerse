@@ -1,12 +1,20 @@
 import 'package:animeverse/features/auth/pages/signin.dart';
+import 'package:animeverse/features/auth/pages/signin_with_password.dart';
+import 'package:animeverse/features/auth/provider/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController firstNameController = TextEditingController();
+    final TextEditingController lastNameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -23,6 +31,13 @@ class SignupScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                  ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Image.asset(
+                  'assets/icon.png',
+                ),
+              ),
+              const SizedBox(height: 24),
                 Text(
                   'Sign Up',
                   style: GoogleFonts.urbanist(
@@ -32,16 +47,48 @@ class SignupScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-                _buildTextField(label: 'Username', icon: Icons.person),
-                const SizedBox(height: 20),
-                _buildTextField(label: 'Email', icon: Icons.email),
+                _buildTextField(
+                  label: 'First Name',
+                  icon: Icons.person,
+                  controller: firstNameController,
+                ),
                 const SizedBox(height: 20),
                 _buildTextField(
-                    label: 'Password', icon: Icons.lock, isPassword: true),
+                  label: 'Last Name',
+                  icon: Icons.person,
+                  controller: lastNameController,
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  label: 'Email',
+                  icon: Icons.email,
+                  controller: emailController,
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  label: 'Password',
+                  icon: Icons.lock,
+                  isPassword: true,
+                  controller: passwordController,
+                ),
                 const SizedBox(height: 40),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Handle sign up action
+                    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                    await authProvider.signUpWithEmail(
+                      emailController.text,
+                      passwordController.text,
+                      firstNameController.text,
+                      lastNameController.text,
+                    );
+
+                    // Redirect to SigninWithPassword page
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const SigninWithPassword(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green, // Green sign up button
@@ -88,11 +135,14 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(
-      {required String label,
-      required IconData icon,
-      bool isPassword = false}) {
+  Widget _buildTextField({
+    required String label,
+    required IconData icon,
+    bool isPassword = false,
+    required TextEditingController controller,
+  }) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: label,

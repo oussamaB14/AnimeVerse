@@ -1,4 +1,5 @@
 import 'package:animeverse/presentation/home.dart';
+import 'package:animeverse/presentation/new_release.dart';
 import 'package:animeverse/presentation/release_calander.dart';
 import 'package:animeverse/presentation/user_profile.dart';
 import 'package:animeverse/features/bookmarks/pages/bookmarks_screen.dart';
@@ -22,7 +23,7 @@ class _AppWrapperState extends State<AppWrapper> {
     const HomeScreen(),
     const ReleaseCalanderScreen(),
     const BookmarksScreen(),
-    const DownloadsScreen(),
+    const NewReleasesScreen(),
     const UserProfileScreen(),
   ];
 
@@ -72,14 +73,14 @@ class _AppWrapperState extends State<AppWrapper> {
           ),
           BottomNavigationBarItem(
             icon: HeroIcon(
-              HeroIcons.inboxArrowDown,
+              HeroIcons.newspaper,
               style: HeroIconStyle.outline,
             ),
             activeIcon: HeroIcon(
-              HeroIcons.inboxArrowDown,
+              HeroIcons.newspaper,
               style: HeroIconStyle.solid,
             ),
-            label: 'Downloads',
+            label: 'News',
           ),
           BottomNavigationBarItem(
             icon: HeroIcon(

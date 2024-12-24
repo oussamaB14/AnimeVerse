@@ -51,7 +51,10 @@ class SignInScreen extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Image.asset('assets/icon.png'),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Image.asset('assets/icon.png'),
+        ),
       ],
     );
   }

@@ -2,7 +2,7 @@ import 'package:animeverse/app/app.dart';
 import 'package:animeverse/app/firebase_options.dart';
 import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
 import 'package:animeverse/features/auth/provider/AuthProvider.dart';
-import 'package:animeverse/features/movies/providers/movieProvider.dart';
+import 'package:animeverse/features/movies/pages/providers/movieProvider.dart';
 import 'package:animeverse/features/player/providers/video_provider.dart';
 import 'package:animeverse/features/bookmarks/providers/bookmark_provider.dart';
 import 'package:animeverse/features/anime/providers/search_provider.dart';

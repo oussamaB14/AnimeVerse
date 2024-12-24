@@ -1,8 +1,10 @@
 import 'package:animeverse/features/anime/pages/anime_list.dart';
 import 'package:animeverse/features/anime/widgets/anime_search_icon.dart';
 import 'package:animeverse/features/anime/widgets/home_header_loader.dart';
+import 'package:animeverse/features/manga/pages/manga_details.dart';
 import 'package:animeverse/features/manga/pages/manga_list.dart';
 import 'package:animeverse/features/manga/widgets/manga_list_item.dart';
+import 'package:animeverse/features/movies/pages/movies_details.dart';
 import 'package:animeverse/presentation/new_release.dart';
 import 'package:animeverse/theme/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
 import 'package:animeverse/presentation/anime_details.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:animeverse/features/movies/providers/movieProvider.dart';
+import 'package:animeverse/features/movies/pages/providers/movieProvider.dart';
 import 'package:animeverse/features/anime/widgets/anime_listview_loader.dart';
 import 'package:animeverse/features/movies/pages/movies_list.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -318,14 +320,25 @@ class _HomeState extends State<HomeScreen> {
                           children: [
                             Stack(
                               children: [
-                                Container(
-                                  width: 120,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    image: DecorationImage(
-                                      image: NetworkImage(anime.image),
-                                      fit: BoxFit.cover,
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.leftToRight,
+                                            child: AnimeDetailsScreen(
+                                                animeId: anime.id)));
+                                  },
+                                  child: Container(
+                                    width: 120,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      image: DecorationImage(
+                                        image: NetworkImage(anime.image),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -382,13 +395,25 @@ class _HomeState extends State<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  movie.image,
-                                  height: 150,
-                                  width: 100,
-                                  fit: BoxFit.cover,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MovieDetailsScreen(
+                                        movie: movie,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    movie.image,
+                                    height: 150,
+                                    width: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -431,13 +456,25 @@ class _HomeState extends State<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  manga.image,
-                                  height: 150,
-                                  width: 100,
-                                  fit: BoxFit.cover,
+                              GestureDetector(
+                                onTap: () {
+                                  // Navigate to MangaDetailsPage when tapped
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          MangaDetailsPage(mangaId: manga.id),
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    manga.image,
+                                    height: 150,
+                                    width: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 4),

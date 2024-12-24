@@ -1,8 +1,8 @@
 import 'package:animeverse/app/shared/app_bar.dart';
 import 'package:animeverse/features/anime/provider/AnimeProvider.dart';
-import 'package:animeverse/presentation/anime_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewReleasesScreen extends StatefulWidget {
   const NewReleasesScreen({super.key});
@@ -15,102 +15,98 @@ class _NewReleaseScreenState extends State<NewReleasesScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch recent episodes when the screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AnimeProvider>(context, listen: false).fetchRecentEpisodes();
+      Provider.of<AnimeProvider>(context, listen: false).fetchNews();
     });
+  }
+
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(title: 'New Episode Releases'),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Consumer<AnimeProvider>(
-          builder: (context, animeProvider, child) {
-            if (animeProvider.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      appBar: const MyAppBar(title: 'Anime News'),
+      body: Consumer<AnimeProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoadingNews) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.7,
-              ),
-              itemCount: animeProvider.recentEpisodes.length,
-              itemBuilder: (context, index) {
-                final anime = animeProvider.recentEpisodes[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AnimeDetailsScreen(
-                          animeId: anime.id,
-                        ),
-                      ),
-                    );
-                  },
+          if (provider.newsError != null) {
+            return Center(child: Text(provider.newsError!));
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: provider.news.length,
+            itemBuilder: (context, index) {
+              final newsItem = provider.news[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: InkWell(
+                  onTap: () => _launchUrl(newsItem.url),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Stack(
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(4),
+                        ),
+                        child: Image.network(
+                          newsItem.thumbnail,
+                          width: double.infinity,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                image: DecorationImage(
-                                  image: NetworkImage(anime.image),
-                                  fit: BoxFit.cover,
-                                ),
+                            Text(
+                              newsItem.title,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Positioned(
-                              top: 8,
-                              left: 8,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  'EP ${anime.episodeNumber}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Text(
+                                  newsItem.uploadedAt,
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 14,
                                   ),
                                 ),
-                              ),
+                                const Spacer(),
+                                ...newsItem.topics.map(
+                                  (topic) => Chip(
+                                    label: Text(
+                                      topic,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        anime.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ],
                   ),
-                );
-              },
-            );
-          },
-        ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
