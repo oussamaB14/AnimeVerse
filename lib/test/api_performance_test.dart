@@ -8,7 +8,7 @@ void main() {
     test('should fetch anime list within acceptable time', () async {
       // Arrange
 
-      const timeout = Duration(seconds: 15);
+      const timeout = Duration(seconds: 4);
 
       // Act & Assert
 
@@ -20,7 +20,7 @@ void main() {
 
     test('should fetch anime details within acceptable time', () async {
       // Arrange
-      const timeout = Duration(seconds: 9);
+      const timeout = Duration(seconds: 5);
       const testAnimeId = 'dandadan';
       // Act & Assert
       await expectLater(

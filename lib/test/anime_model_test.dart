@@ -4,7 +4,7 @@ import 'package:animeverse/core/models/episode.dart';
 
 void main() {
   group('Anime Model Tests', () {
-    test('should create Anime instance from JSON', () {
+    test('should get Anime instance from JSON', () {
       // Arrange
       final Map<String, dynamic> json = {
         'id': '1',
@@ -39,7 +39,7 @@ void main() {
       expect(anime.episodes.first.id, 'ep1');
     });
 
-    test('should create Anime instance from listing JSON with minimal data', () {
+    test('should get Anime instance from listing JSON with minimal data', () {
       // Arrange
       final Map<String, dynamic> json = {
         'id': '1',

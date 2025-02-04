@@ -3,7 +3,7 @@ import 'package:animeverse/core/models/manga.dart';
 
 void main() {
   group('Manga Model Tests', () {
-    test('should create Chapter instance from JSON', () {
+    test('should get Chapter instance from JSON', () {
       // Arrange
       final Map<String, dynamic> json = {
         'id': 'ch1',
@@ -20,7 +20,7 @@ void main() {
       expect(chapter.releaseDate, '2024-03-20');
     });
 
-    test('should create Manga instance with chapters from JSON', () {
+    test('should get Manga instance with chapters from JSON', () {
       // Arrange
       final Map<String, dynamic> json = {
         'id': 'm1',
